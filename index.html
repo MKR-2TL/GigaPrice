@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GigaPrice Beta 1</title>
+<video autoplay muted loop id="background-video">
+    <source src="backup.mp4" type="video/mp4">
+    Votre navigateur ne supporte pas la vidéo.
+</video>
+<script>
+    const video = document.getElementById("background-video");
+    video.playbackRate = 0.5; // 0.5 = moitié de la vitesse normale
+</script>
+
+<style>
+/* === Fond animé === */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: white;
+}
+#background-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* fait que la vidéo couvre tout le fond */
+    z-index: -1;       /* met la vidéo derrière tout le contenu */
+    filter: brightness(60%) contrast(110%);
+}
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* === Navigation === */
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 20px 0;
+    background: rgba(0,0,0,0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+nav a {
+    color: #1f7bd8;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: all 0.3s ease;
+}
+nav a:hover {
+    transform: scale(1.2);
+    color: #414fce;
+}
+
+/* === Conteneur central === */
+.center-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px 20px 20px 20px;
+}
+header h1 {
+    font-size: 3em;
+    margin: 0;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+}
+.beta {
+  display: inline-block;
+  font-size: 2em;
+  font-weight: bold;
+  color: #f30808;
+  text-shadow: 0 0 5px rgb(223, 223, 235), 0 0 10px rgb(241, 240, 239);
+  animation: smoothBounce 2.5s infinite ease-in-out;
+}
+@keyframes smoothBounce {
+  0%   { transform: translateY(0); }
+  30%  { transform: translateY(-7px); }
+  50%  { transform: translateY(-7px); }
+  70%  { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
+}
+
+/* === Barre de recherche === */
+.search-bar {
+    display: flex;
+    justify-content: center;
+    margin: 160px 0 30px 0;
+    width: 40%;
+}
+.search-bar input[type="text"] {
+    padding: 12px 20px;
+    width: 100%;
+    border: none;
+    border-radius: 30px 0 0 30px;
+    outline: none;
+    font-size: 1em;
+}
+.search-bar button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 0 30px 30px 0;
+    background-color: #2978b5;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+.search-bar button:hover {
+    background-color: #1a5c8a;
+}
+
+/* === Cartes principales === */
+main {
+    max-width: 1000px;
+    margin: 110px auto 0 auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
+.card {
+    background: rgba(0,0,0,0.4);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+/* === Footer === */
+footer {
+    text-align: center;
+    font-size: 0.55em;
+    margin: 100px 0 10px 0;
+}
+
+/* === POPUP === */
+#popup {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    width: 420px;
+    background: rgba(0,0,0,0.85);
+    border-radius: 12px;
+    padding: 30px 25px;
+    text-align: center;
+    backdrop-filter: blur(6px);
+    border: 2px solid #00aaff;
+    box-shadow: 0 0 20px #00aaff;
+    z-index: 1000;
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+#popup.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+.popup-title {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #00aaff;
+}
+.popup-text {
+    font-size: 17px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+.discord-link {
+    display: inline-block;
+    margin-bottom: 8px;
+}
+.discord-link img {
+    width: 50px;
+    filter: invert(90%) brightness(150%) drop-shadow(0 0 6px #00d5ff);
+    transition: filter 0.3s ease;
+}
+.discord-link img:hover {
+    filter: brightness(1.5) drop-shadow(0 0 8px #00e1ff);
+}
+#continue-btn {
+    display: block;
+    margin: 30px auto 0 auto;
+    padding: 12px 28px;
+    font-size: 16px;
+    border: none;
+    border-radius: 45px;
+    background-color: #00509e;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+#continue-btn:hover {
+    background-color: #003d7a;
+}
+
+/* === BOUTON DISCORD FLOTANT === */
+.floating-discord-btn {
+    position: fixed;
+    top: 65px;      /* hauteur par rapport au haut */
+    right: 30px;    /* distance du bord droit */
+    background-color: #5865F2;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 22px;
+    box-shadow: 0 0 12px rgba(88, 101, 242, 0.6);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    z-index: 2000;
+}
+.floating-discord-btn img {
+    width: 24px;
+    height: 24px;
+}
+.floating-discord-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(88, 101, 242, 0.9);
+}
+</style>
+
+</head>
+<body>
+
+<!-- === Navigation === -->
+
+<nav>
+    <a href="promo.html">Promo</a>
+    <a href="index.html">Accueil</a>
+    <a href="top-jeux.html">Top jeux</a>
+    <a href="https://discord.gg/kSFqRNyn">Discord</a>
+</nav>
+
+<!-- === Contenu central === -->
+
+<div class="center-container">
+    <header>
+        <h1>GigaPrice</h1>
+        <span class="beta">Beta 1</span>
+    </header>
+
+```
+<div class="search-bar">
+    <input type="text" placeholder="Rechercher un jeu...">
+    <button>Rechercher</button>
+</div>
+```
+
+</div>
+
+<!-- === Cartes principales === -->
+
+<main>
+    <div class="card">
+        <h2>Jeu du moment</h2>
+        <p>Découvre le jeu le plus téléchargé de cette semaine et ses meilleures offres.</p>
+    </div>
+    <div class="card">
+        <h2>Comparateur de prix</h2>
+        <p>Compare les prix sur Steam, Instant Gaming, Eneba et plus encore !</p>
+    </div>
+    <div class="card">
+        <h2>Version Premium</h2>
+        <p>Profite d’alertes promos, de tops exclusifs et de contenu réservé aux membres premium.</p>
+    </div>
+</main>
+
+<!-- === Footer === -->
+
+<footer>
+    &copy; 2025 GigaPrice Beta 1 - Tous droits réservés
+</footer>
+
+<!-- === POPUP === -->
+
+<div id="popup">
+    <div class="popup-title">Important</div>
+    <div class="popup-text">
+        GigaPrice est un site entièrement francophone.<br><br>
+        N'hésite pas à rejoindre notre serveur Discord pour obtenir de l'aide,<br>
+        voter le jeu de la semaine et découvrir la version Premium !
+    </div>
+    <a href="https://discord.gg/kSFqRNyn" class="discord-link" target="_blank">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/discord.svg">
+    </a>
+    <button id="continue-btn" onclick="closePopup()">Continuer</button>
+</div>
+
+<!-- === BOUTON DISCORD FLOTANT HTML === -->
+
+<a href="https://discord.gg/kSFqRNyn" class="floating-discord-btn" target="_blank">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/discord.svg" alt="Discord">
+    Discord
+</a>
+
+<script>
+// === POPUP UNE FOIS SEULEMENT ===
+function closePopup() {
+    document.getElementById("popup").classList.remove("show");
+    localStorage.setItem("popupShown", "true");
+}
+
+// Afficher le popup si jamais il n'a pas encore été affiché
+window.addEventListener("load", () => {
+    setTimeout(() => {
+        document.getElementById("popup").classList.add("show");
+    }, 2000);
+});
+</script>
+
+</body>
+</html>
