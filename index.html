@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GigaPrice - Meilleur comparateur de prix gaming</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <title>GigaPrice - Comparateur de prix gaming professionnel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,141 +13,97 @@
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            color: white;
-            background: linear-gradient(-45deg, #2d1b4e, #4a2c6e, #6b4791, #8a5fb5);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            font-family: 'Inter', sans-serif;
+            color: #e0e0e0;
+            background: #0a0a0f;
             overflow-x: hidden;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* Gradient animé subtil */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(138, 16, 219, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(67, 56, 202, 0.1) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
         }
 
-        /* === CARTE VIP FLOTTANTE === */
+        /* VIP Card - FIXE (ne bouge pas) */
         .vip-card {
             position: fixed;
             left: 30px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: linear-gradient(135deg, rgba(138, 16, 219, 0.3), rgba(255, 215, 0, 0.25));
+            top: 120px; /* Position fixe depuis le haut */
+            background: linear-gradient(135deg, rgba(138, 16, 219, 0.2), rgba(67, 56, 202, 0.2));
             backdrop-filter: blur(20px);
-            border: 2px solid rgba(199, 16, 219, 0.6);
-            border-radius: 20px;
-            padding: 25px 30px;
-            width: 280px;
-            box-shadow: 0 8px 32px rgba(138, 16, 219, 0.4), 0 0 60px rgba(199, 16, 219, 0.3);
-            animation: vipGlow 3s ease-in-out infinite;
-            z-index: 1500;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .vip-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            animation: shimmer 3s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-
-        @keyframes vipGlow {
-            0%, 100% { 
-                box-shadow: 0 8px 32px rgba(138, 16, 219, 0.4), 0 0 60px rgba(199, 16, 219, 0.3);
-                border-color: rgba(199, 16, 219, 0.6);
-            }
-            50% { 
-                box-shadow: 0 12px 40px rgba(138, 16, 219, 0.6), 0 0 80px rgba(199, 16, 219, 0.5);
-                border-color: rgba(255, 215, 0, 0.9);
-            }
-        }
-
-        .vip-card:hover {
-            transform: translateY(-50%) scale(1.05);
-            box-shadow: 0 15px 50px rgba(138, 16, 219, 0.6), 0 0 100px rgba(199, 16, 219, 0.4);
+            border: 1px solid rgba(138, 16, 219, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            width: 260px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
         }
 
         .vip-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, #c710db, #ffd700);
+            background: linear-gradient(135deg, #8a10db, #4338ca);
             color: white;
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-weight: 800;
-            font-size: 1.1em;
-            margin-bottom: 12px;
-            box-shadow: 0 4px 15px rgba(199, 16, 219, 0.5);
-            letter-spacing: 1px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9em;
+            margin-bottom: 16px;
         }
 
         .vip-card h3 {
-            background: linear-gradient(135deg, #c710db, #ffd700);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 1.3em;
+            color: #fff;
+            font-size: 1.2em;
             font-weight: 700;
             margin-bottom: 8px;
         }
 
         .vip-card p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 0.95em;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9em;
             line-height: 1.5;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
         }
 
         .vip-price {
             display: flex;
             align-items: baseline;
-            gap: 5px;
-            margin-bottom: 15px;
+            gap: 4px;
+            margin-bottom: 16px;
         }
 
         .vip-price-amount {
-            font-size: 2.5em;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ffd700, #ffed4e);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+            font-size: 2.2em;
+            font-weight: 800;
+            color: #8a10db;
         }
 
         .vip-price-currency {
-            font-size: 1.2em;
-            color: #ffd700;
-            font-weight: 700;
+            font-size: 1.1em;
+            color: #8a10db;
+            font-weight: 600;
         }
 
         .vip-btn {
             width: 100%;
-            padding: 14px 25px;
-            background: linear-gradient(135deg, #8a10db, #c710db);
-            border: 2px solid rgba(255, 215, 0, 0.5);
-            border-radius: 30px;
+            padding: 12px;
+            background: linear-gradient(135deg, #8a10db, #4338ca);
+            border: none;
+            border-radius: 8px;
             color: white;
-            font-weight: 800;
-            font-size: 1.05em;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 20px rgba(138, 16, 219, 0.4);
-            letter-spacing: 0.5px;
-            position: relative;
-            z-index: 1;
+            transition: all 0.3s;
             text-decoration: none;
             display: block;
             text-align: center;
@@ -155,234 +111,219 @@
 
         .vip-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(138, 16, 219, 0.6);
-            background: linear-gradient(135deg, #9a20eb, #d720eb);
-            border-color: rgba(255, 215, 0, 0.8);
+            box-shadow: 0 8px 20px rgba(138, 16, 219, 0.4);
         }
 
+        /* Navigation */
         nav {
             display: flex;
             justify-content: center;
-            gap: 40px;
-            padding: 25px 20px;
-            background: rgba(0, 0, 0, 0.25);
+            gap: 32px;
+            padding: 20px;
+            background: rgba(10, 10, 15, 0.8);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
         nav a {
-            color: white;
+            color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
             font-weight: 600;
-            padding: 10px 20px;
-            border-radius: 12px;
+            font-size: 0.95em;
+            padding: 8px 16px;
+            border-radius: 8px;
             transition: all 0.3s;
         }
 
         nav a.active {
-            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            background: rgba(138, 16, 219, 0.2);
         }
 
         nav a:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+            color: #fff;
+            background: rgba(138, 16, 219, 0.15);
         }
 
+        /* Hero */
         .hero {
             text-align: center;
-            padding: 100px 20px 60px;
+            padding: 80px 20px 60px;
         }
 
         h1 {
-            font-size: 5em;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ffffff, #e0e7ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.3));
-        }
-
-        .version {
-            display: inline-block;
-            font-size: 1.5em;
+            font-size: 4em;
             font-weight: 800;
-            margin-top: 20px;
-            padding: 12px 30px;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            border-radius: 50px;
-            border: 2px solid #ff4444;
-            color: #ff4444;
-            text-shadow: 0 0 10px rgba(255, 68, 68, 0.8);
-            animation: bounce 2s infinite;
+            color: #fff;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        .tagline {
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 40px;
         }
 
+        /* Search */
         .search {
-            max-width: 650px;
-            margin: 60px auto 0;
+            max-width: 600px;
+            margin: 0 auto;
             padding: 0 20px;
         }
 
         .search-bar {
             display: flex;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
-            border-radius: 50px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
-            transition: all 0.3s;
-        }
-
-        .search-bar:focus-within {
-            border-color: rgba(255, 255, 255, 0.5);
-            transform: translateY(-2px);
         }
 
         .search-bar input {
             flex: 1;
-            padding: 18px 25px;
+            padding: 16px 20px;
             border: none;
             background: transparent;
             color: white;
-            font-size: 1.1em;
+            font-size: 1em;
             outline: none;
         }
 
         .search-bar input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.4);
         }
 
         .search-bar button {
-            padding: 18px 35px;
+            padding: 16px 28px;
             border: none;
-            background: rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, #8a10db, #4338ca);
             color: white;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
         }
 
         .search-bar button:hover {
-            background: rgba(255, 255, 255, 0.3);
+            filter: brightness(1.1);
         }
 
+        /* Cards */
         .cards {
             max-width: 1200px;
-            margin: 100px auto;
+            margin: 80px auto;
             padding: 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px);
-            padding: 35px;
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.4s;
+            padding: 32px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
         }
 
         .card:hover {
-            transform: translateY(-15px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(138, 16, 219, 0.3);
         }
 
         .card h2 {
-            font-size: 1.8em;
-            margin-bottom: 15px;
+            font-size: 1.5em;
+            margin-bottom: 12px;
+            color: #fff;
         }
 
         .card p {
-            font-size: 1.05em;
-            line-height: 1.7;
-            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.95em;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.6);
         }
 
+        /* Discord Button */
         .discord-btn {
             position: fixed;
-            top: 30px;
-            right: 30px;
+            top: 20px;
+            right: 20px;
             background: #5865F2;
             color: white;
-            padding: 14px 28px;
-            border-radius: 50px;
+            padding: 12px 24px;
+            border-radius: 8px;
             text-decoration: none;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-weight: 600;
+            font-size: 0.9em;
             z-index: 2000;
             transition: all 0.3s;
         }
 
         .discord-btn:hover {
-            transform: translateY(-3px) scale(1.05);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(88, 101, 242, 0.4);
         }
 
+        /* Footer */
         footer {
             text-align: center;
-            padding: 30px;
+            padding: 40px 20px;
             margin-top: 80px;
-            background: rgba(0, 0, 0, 0.2);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(10, 10, 15, 0.8);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9em;
         }
 
         @media (max-width: 768px) {
-            h1 { font-size: 3em; }
+            h1 { font-size: 2.5em; }
             .cards { grid-template-columns: 1fr; }
             .vip-card { display: none; }
         }
     </style>
 </head>
 <body>
-    <!-- CARTE VIP FLOTTANTE -->
+    <!-- VIP Card - FIXE -->
     <div class="vip-card">
         <div class="vip-badge">
             <span>👑</span>
             <span>VIP</span>
         </div>
         <h3>Accès Premium</h3>
-        <p>Alertes exclusives, prix en avant-première et contenus réservés</p>
+        <p>Alertes exclusives, notifications instantanées et contenus réservés</p>
         <div class="vip-price">
             <span class="vip-price-amount">4.99</span>
-            <span class="vip-price-currency">€</span>
+            <span class="vip-price-currency">€/mois</span>
         </div>
         <a href="https://discord.gg/kSFqRNyn" target="_blank" class="vip-btn">
-            Acheter maintenant
+            En savoir plus
         </a>
     </div>
 
-    <a href="https://discord.gg/kSFqRNyn" class="discord-btn" target="_blank">
-        <svg width="24" height="24" viewBox="0 0 71 55" fill="white">
-            <path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718 48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z"/>
-        </svg>
-        Discord
-    </a>
+    <a href="https://discord.gg/kSFqRNyn" class="discord-btn" target="_blank">Discord</a>
 
     <nav>
         <a href="index.html" class="active">Accueil</a>
         <a href="promo.html">Promotions</a>
-        <a href="https://discord.gg/kSFqRNyn" target="_blank">Community</a>
+        <a href="comparateur.html">Comparateur</a>
+        <a href="alertes.html">Alertes</a>
+        <a href="historique.html">Historique Prix</a>
     </nav>
 
     <div class="hero">
         <h1>GigaPrice</h1>
-        <span class="version">BETA v0.1</span>
+        <p class="tagline">Le comparateur de prix gaming le plus complet</p>
         
         <div class="search">
             <div class="search-bar">
                 <input type="text" placeholder="Rechercher un jeu..." id="search">
-                <button onclick="alert('🔍 Recherche en développement !')">Rechercher</button>
+                <button onclick="alert('🔍 Recherche en développement')">Rechercher</button>
             </div>
         </div>
     </div>
@@ -390,20 +331,33 @@
     <div class="cards">
         <div class="card">
             <h2>🔥 Promotions</h2>
-            <p>Découvre les meilleures offres du moment sur PC, PlayStation, Xbox et Nintendo Switch. Mises à jour quotidiennes !</p>
+            <p>Découvre les meilleures offres du moment, mises à jour quotidiennement. Économise jusqu'à 90% sur tes jeux préférés.</p>
         </div>
         <div class="card">
             <h2>💰 Comparateur</h2>
-            <p>Compare les prix instantanément sur tous les stores. Trouve toujours le meilleur prix pour tes jeux préférés.</p>
+            <p>Compare instantanément les prix sur Steam, Epic, GOG et 15+ autres stores. Trouve toujours le meilleur deal.</p>
         </div>
         <div class="card">
-            <h2>👑 Community</h2>
-            <p>Rejoins notre Discord pour des alertes exclusives, votes et discussions avec d'autres gamers passionnés !</p>
+            <h2>🔔 Alertes Prix</h2>
+            <p>Reçois une notification Discord instantanée quand ton jeu atteint le prix désiré. Ne rate plus jamais une promo.</p>
+        </div>
+        <div class="card">
+            <h2>📊 Historique</h2>
+            <p>Consulte l'évolution des prix sur 12 mois. Sache exactement quand acheter au meilleur moment.</p>
+        </div>
+        <div class="card">
+            <h2>👥 Community</h2>
+            <p>Rejoins 1000+ gamers sur Discord. Partage tes bons plans et vote pour le jeu de la semaine.</p>
+        </div>
+        <div class="card">
+            <h2>🎮 Top Jeux</h2>
+            <p>Découvre les jeux les plus recherchés et les meilleurs deals de la communauté cette semaine.</p>
         </div>
     </div>
 
     <footer>
-        © 2025 GigaPrice - Tous droits réservés
+        © 2025 GigaPrice - Tous droits réservés<br>
+        <small>Comparateur indépendant - Prix mis à jour toutes les heures</small>
     </footer>
 </body>
 </html>
