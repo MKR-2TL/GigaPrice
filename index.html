@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GigaPrice Beta 1</title>
+<link rel="icon" type="image/png" href="favicon.png">
 <video autoplay muted loop id="background-video">
     <source src="backup.mp4" type="video/mp4">
     Votre navigateur ne supporte pas la vidéo.
@@ -13,12 +14,18 @@
     const video = document.getElementById("background-video");
     video.playbackRate = 0.5; // 0.5 = moitié de la vitesse normale
 </script>
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GigaPrice Beta 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@900&display=swap" rel="stylesheet">
 <style>
 /* === Fond animé === */
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'lato', sans-serif;
     color: white;
 }
 #background-video {
@@ -49,7 +56,7 @@ nav {
     z-index: 100;
 }
 nav a {
-    color: #1f7bd8;
+    color: #8a10db;
     text-decoration: none;
     font-weight: bold;
     font-size: 1.1em;
@@ -57,7 +64,7 @@ nav a {
 }
 nav a:hover {
     transform: scale(1.2);
-    color: #414fce;
+    color: #550ec7;
 }
 
 /* === Conteneur central === */
@@ -73,11 +80,14 @@ header h1 {
     font-size: 3em;
     margin: 0;
     text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+    font-family: 'lato';
+    font-weight: 900;
 }
-.beta {
+.version {
   display: inline-block;
   font-size: 2em;
   font-weight: bold;
+  font-weight: 900;
   color: #f30808;
   text-shadow: 0 0 5px rgb(223, 223, 235), 0 0 10px rgb(241, 240, 239);
   animation: smoothBounce 2.5s infinite ease-in-out;
@@ -109,14 +119,14 @@ header h1 {
     padding: 12px 20px;
     border: none;
     border-radius: 0 30px 30px 0;
-    background-color: #2978b5;
+    background-color: #800e97;
     color: #fff;
     font-weight: bold;
     cursor: pointer;
     transition: background 0.3s ease;
 }
 .search-bar button:hover {
-    background-color: #1a5c8a;
+    background-color: #a30a9c;
 }
 
 /* === Cartes principales === */
@@ -160,21 +170,23 @@ footer {
     padding: 30px 25px;
     text-align: center;
     backdrop-filter: blur(6px);
-    border: 2px solid #00aaff;
-    box-shadow: 0 0 20px #00aaff;
+    border: 2px solid #a200ff;
+    box-shadow: 0 0 20px #a200ff;
     z-index: 1000;
     opacity: 0;
     transition: all 0.5s ease;
+    pointer-events: none;
 }
 #popup.show {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
+    pointer-events: auto;
 }
 .popup-title {
     font-size: 26px;
     font-weight: bold;
     margin-bottom: 15px;
-    color: #00aaff;
+    color: #a200ff;
 }
 .popup-text {
     font-size: 17px;
@@ -187,11 +199,11 @@ footer {
 }
 .discord-link img {
     width: 50px;
-    filter: invert(90%) brightness(150%) drop-shadow(0 0 6px #00d5ff);
+    filter: invert(90%) brightness(150%) drop-shadow(0 0 6px #6200ff);
     transition: filter 0.3s ease;
 }
 .discord-link img:hover {
-    filter: brightness(1.5) drop-shadow(0 0 8px #00e1ff);
+    filter: brightness(1.5) drop-shadow(0 0 8px #8c00ff);
 }
 #continue-btn {
     display: block;
@@ -200,13 +212,13 @@ footer {
     font-size: 16px;
     border: none;
     border-radius: 45px;
-    background-color: #00509e;
+    background-color: #2f009e;
     color: white;
     cursor: pointer;
     transition: background 0.3s ease;
 }
 #continue-btn:hover {
-    background-color: #003d7a;
+    background-color: #2b007a;
 }
 
 /* === BOUTON DISCORD FLOTANT === */
@@ -214,7 +226,7 @@ footer {
     position: fixed;
     top: 65px;      /* hauteur par rapport au haut */
     right: 30px;    /* distance du bord droit */
-    background-color: #5865F2;
+    background-color: #8e58f2;
     color: white;
     padding: 15px 30px;
     border-radius: 16px;
@@ -245,9 +257,10 @@ footer {
 
 <nav>
     <a href="promo.html">Promo</a>
-    <a href="index.html">Accueil</a>
+    <a href="index.html">Nouveautés</a>
     <a href="top-jeux.html">Top jeux</a>
-    <a href="https://discord.gg/kSFqRNyn">Discord</a>
+    <a href="">Vote</a>
+    <a href="index.html">Logo Accueil</a>
 </nav>
 
 <!-- === Contenu central === -->
@@ -255,15 +268,13 @@ footer {
 <div class="center-container">
     <header>
         <h1>GigaPrice</h1>
-        <span class="beta">Beta 1</span>
+        <span class="version">V0.0.1</span>
     </header>
 
-```
 <div class="search-bar">
     <input type="text" placeholder="Rechercher un jeu...">
     <button>Rechercher</button>
 </div>
-```
 
 </div>
 
