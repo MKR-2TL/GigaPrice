@@ -4,49 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GigaPrice - Promotions Gaming</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Poppins', sans-serif;
-            color: white;
-            background: linear-gradient(-45deg, #2d1b4e, #4a2c6e, #6b4791, #8a5fb5);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            font-family: 'Inter', sans-serif;
+            color: #e0e0e0;
+            background: #0a0a0f;
             min-height: 100vh;
         }
         
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(138, 16, 219, 0.1) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
         }
         
         nav {
             display: flex;
             justify-content: center;
-            gap: 40px;
-            padding: 25px 20px;
-            background: rgba(0, 0, 0, 0.25);
+            gap: 32px;
+            padding: 20px;
+            background: rgba(10, 10, 15, 0.8);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             position: sticky;
             top: 0;
             z-index: 100;
         }
         
         nav a {
-            color: white;
+            color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
             font-weight: 600;
-            padding: 10px 20px;
-            border-radius: 12px;
+            font-size: 0.95em;
+            padding: 8px 16px;
+            border-radius: 8px;
             transition: all 0.3s;
         }
         
-        nav a.active { background: rgba(255, 255, 255, 0.15); }
-        nav a:hover { background: rgba(255, 255, 255, 0.2); }
+        nav a.active {
+            color: #fff;
+            background: rgba(138, 16, 219, 0.2);
+        }
+        
+        nav a:hover {
+            color: #fff;
+            background: rgba(138, 16, 219, 0.15);
+        }
         
         .header {
             text-align: center;
@@ -54,25 +66,30 @@
         }
         
         .header h1 {
-            font-size: 4em;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ff4444, #ffd700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 3em;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+        
+        .header p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.1em;
         }
         
         .loading {
             text-align: center;
             padding: 100px 20px;
-            font-size: 1.5em;
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.6);
         }
         
         .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            border-top: 4px solid white;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #8a10db;
             border-radius: 50%;
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             animation: spin 1s linear infinite;
             margin: 30px auto;
         }
@@ -85,25 +102,27 @@
         .filters {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             padding: 30px 20px;
             flex-wrap: wrap;
         }
         
         .filter-btn {
-            padding: 12px 30px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 30px;
-            color: white;
+            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.7);
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: 0.9em;
         }
         
         .filter-btn:hover, .filter-btn.active {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 215, 0, 0.6);
+            background: rgba(138, 16, 219, 0.2);
+            border-color: rgba(138, 16, 219, 0.3);
+            color: #fff;
         }
         
         .grid {
@@ -111,104 +130,127 @@
             margin: 0 auto;
             padding: 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
         }
         
         .card {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px);
-            border-radius: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
             overflow: hidden;
-            transition: all 0.4s;
+            transition: all 0.3s;
             position: relative;
         }
         
         .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            transform: translateY(-8px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(138, 16, 219, 0.3);
         }
         
         .badge {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #ff4444;
-            padding: 8px 20px;
+            top: 12px;
+            right: 12px;
+            background: #8a10db;
+            padding: 6px 16px;
             border-radius: 20px;
-            font-weight: 800;
+            font-weight: 700;
+            font-size: 0.9em;
             z-index: 10;
         }
         
         .image {
             width: 100%;
-            height: 200px;
+            height: 180px;
             background-size: cover;
             background-position: center;
         }
         
-        .content { padding: 25px; }
-        
-        .title {
-            font-size: 1.5em;
-            font-weight: 700;
-            margin-bottom: 10px;
+        .content {
+            padding: 20px;
         }
         
-        .platform {
+        .title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        
+        .store {
             display: inline-block;
-            padding: 5px 15px;
-            background: rgba(138, 16, 219, 0.3);
-            border-radius: 15px;
-            font-size: 0.85em;
-            margin-bottom: 15px;
+            padding: 4px 12px;
+            background: rgba(138, 16, 219, 0.2);
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-bottom: 12px;
+            color: rgba(255, 255, 255, 0.8);
         }
         
         .prices {
             display: flex;
             align-items: baseline;
-            gap: 15px;
-            margin-bottom: 15px;
+            gap: 12px;
+            margin-bottom: 12px;
         }
         
         .old-price {
-            font-size: 1.2em;
-            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.4);
             text-decoration: line-through;
         }
         
         .new-price {
-            font-size: 2em;
-            font-weight: 900;
-            color: #ffd700;
+            font-size: 1.8em;
+            font-weight: 800;
+            color: #8a10db;
         }
         
         .btn {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #8a10db, #c710db);
+            padding: 12px;
+            background: linear-gradient(135deg, #8a10db, #4338ca);
             border: none;
-            border-radius: 15px;
+            border-radius: 8px;
             color: white;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
             text-decoration: none;
             display: block;
             text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(138, 16, 219, 0.4);
         }
         
         .discord-btn {
             position: fixed;
-            top: 30px;
-            right: 30px;
+            top: 20px;
+            right: 20px;
             background: #5865F2;
             color: white;
-            padding: 14px 28px;
-            border-radius: 50px;
+            padding: 12px 24px;
+            border-radius: 8px;
             text-decoration: none;
-            font-weight: 700;
+            font-weight: 600;
+            font-size: 0.9em;
             z-index: 2000;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 80px;
+            background: rgba(10, 10, 15, 0.8);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9em;
         }
 
         @media (max-width: 768px) {
@@ -222,12 +264,14 @@
     <nav>
         <a href="index.html">Accueil</a>
         <a href="promo.html" class="active">Promotions</a>
-        <a href="https://discord.gg/kSFqRNyn" target="_blank">Community</a>
+        <a href="comparateur.html">Comparateur</a>
+        <a href="alertes.html">Alertes</a>
+        <a href="historique.html">Historique Prix</a>
     </nav>
 
     <div class="header">
         <h1>🔥 Promotions</h1>
-        <p style="margin-top: 15px; font-size: 1.2em;">Les meilleures offres gaming</p>
+        <p>Les meilleures offres gaming mises à jour quotidiennement</p>
     </div>
 
     <div class="filters">
@@ -245,112 +289,86 @@
         </div>
     </div>
 
-    <script>
-        // 🎮 DONNÉES DE DÉMO - Remplace par tes vraies données plus tard
-        const DEMO_GAMES = [
-            {
-                titre: 'Elden Ring',
-                platform: 'pc',
-                ancien_prix: '59.99',
-                nouveau_prix: '29.99',
-                reduction: 50,
-                store: 'Steam',
-                image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/header.jpg',
-                lien: 'https://discord.gg/kSFqRNyn'
-            },
-            {
-                titre: 'Cyberpunk 2077',
-                platform: 'pc',
-                ancien_prix: '59.99',
-                nouveau_prix: '19.99',
-                reduction: 67,
-                store: 'GOG',
-                image: 'https://image.api.playstation.com/vulcan/ap/rnd/202111/3013/cKZ4tKNFj9C00giTzYtH8PF1.png',
-                lien: 'https://discord.gg/kSFqRNyn'
-            },
-            {
-                titre: 'Red Dead Redemption 2',
-                platform: 'ps',
-                ancien_prix: '59.99',
-                nouveau_prix: '24.99',
-                reduction: 58,
-                store: 'PlayStation Store',
-                image: 'https://image.api.playstation.com/cdn/UP1004/CUSA03041_00/Hpl5MtwQgOVF9vJqlfui6SDB5Jl4oBSq.png',
-                lien: 'https://discord.gg/kSFqRNyn'
-            },
-            {
-                titre: 'God of War',
-                platform: 'ps',
-                ancien_prix: '49.99',
-                nouveau_prix: '19.99',
-                reduction: 60,
-                store: 'PlayStation Store',
-                image: 'https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/4xJ8XB3bi888QTLZYdl7Oi0s.png',
-                lien: 'https://discord.gg/kSFqRNyn'
-            },
-            {
-                titre: 'Forza Horizon 5',
-                platform: 'xbox',
-                ancien_prix: '59.99',
-                nouveau_prix: '29.99',
-                reduction: 50,
-                store: 'Xbox Store',
-                image: 'https://cdn1.epicgames.com/spt-assets/5e0c05e3d74b423b9f16f50d20c0abeb/forza-horizon-5-logo-1elew.png',
-                lien: 'https://discord.gg/kSFqRNyn'
-            },
-            {
-                titre: 'Halo Infinite',
-                platform: 'xbox',
-                ancien_prix: '59.99',
-                nouveau_prix: '19.99',
-                reduction: 67,
-                store: 'Xbox Store',
-                image: 'https://cdn2.unrealengine.com/egs-haloinfinite-343industries-g1a-05-1920x1080-d89e5f2969fb.jpg',
-                lien: 'https://discord.gg/kSFqRNyn'
-            },
-            {
-                titre: 'Zelda: Tears of the Kingdom',
-                platform: 'switch',
-                ancien_prix: '69.99',
-                nouveau_prix: '49.99',
-                reduction: 29,
-                store: 'Nintendo eShop',
-                image: 'https://assets.nintendo.com/image/upload/ar_16:9,c_lpad,w_1240/b_white/f_auto/q_auto/ncom/software/switch/70010000063713/8b3c3a7e-ce0c-47e9-af15-10fe73c01cb0',
-                lien: 'https://discord.gg/kSFqRNyn'
-            },
-            {
-                titre: 'Super Mario Odyssey',
-                platform: 'switch',
-                ancien_prix: '59.99',
-                nouveau_prix: '39.99',
-                reduction: 33,
-                store: 'Nintendo eShop',
-                image: 'https://assets.nintendo.com/image/upload/ar_16:9,c_lpad,w_1240/b_white/f_auto/q_auto/ncom/software/switch/70010000001130/c42553b4fd0312c31e70ec7468c6c9bccd739f340152925b9600631f2d29f8b5',
-                lien: 'https://discord.gg/kSFqRNyn'
-            },
-            {
-                titre: 'Baldur\'s Gate 3',
-                platform: 'pc',
-                ancien_prix: '59.99',
-                nouveau_prix: '44.99',
-                reduction: 25,
-                store: 'Steam',
-                image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/header.jpg',
-                lien: 'https://discord.gg/kSFqRNyn'
-            },
-            {
-                titre: 'Hogwarts Legacy',
-                platform: 'ps',
-                ancien_prix: '59.99',
-                nouveau_prix: '29.99',
-                reduction: 50,
-                store: 'PlayStation Store',
-                image: 'https://cdn1.epicgames.com/offer/e97659b501af4e3981d5430dad170911/EGS_HogwartsLegacy_AvalancheSoftware_S1_2560x1440-2baf3188eb3c1aa248bcc1af6a927b7e',
-                lien: 'https://discord.gg/kSFqRNyn'
-            }
-        ];
+    <footer>
+        © 2025 GigaPrice - Tous droits réservés
+    </footer>
 
-        let allPromos = DEMO_GAMES;
+    <script>
+        let allPromos = [];
+        
+        // URL du fichier JSON sur GitHub (à remplacer par ton URL)
+        const DATA_URL = 'https://raw.githubusercontent.com/TON_USERNAME/TON_REPO/main/data/promo_pc.json';
+        
+        async function loadPromos() {
+            try {
+                // CHARGE LES VRAIS FICHIERS JSON
+                const response = await fetch(DATA_URL);
+                const data = await response.json();
+                allPromos = data;
+                displayPromos(allPromos);
+            } catch (error) {
+                // En cas d'erreur, utilise les données de démo
+                console.log('Utilisation des données de démo');
+                allPromos = generateDemoData();
+                displayPromos(allPromos);
+            }
+        }
+        
+        function generateDemoData() {
+            // Données temporaires (sera remplacé par les vraies promos)
+            return [
+                {
+                    titre: 'Elden Ring',
+                    platform: 'pc',
+                    ancien_prix: '59.99',
+                    nouveau_prix: '29.99',
+                    reduction: 50,
+                    store: 'Steam',
+                    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/header.jpg',
+                    lien: 'https://store.steampowered.com/app/1245620/'
+                },
+                {
+                    titre: 'Cyberpunk 2077',
+                    platform: 'pc',
+                    ancien_prix: '59.99',
+                    nouveau_prix: '19.99',
+                    reduction: 67,
+                    store: 'GOG',
+                    image: 'https://image.api.playstation.com/vulcan/ap/rnd/202111/3013/cKZ4tKNFj9C00giTzYtH8PF1.png',
+                    lien: 'https://www.gog.com/game/cyberpunk_2077'
+                },
+                {
+                    titre: 'Red Dead Redemption 2',
+                    platform: 'ps',
+                    ancien_prix: '59.99',
+                    nouveau_prix: '24.99',
+                    reduction: 58,
+                    store: 'PlayStation Store',
+                    image: 'https://image.api.playstation.com/cdn/UP1004/CUSA03041_00/Hpl5MtwQgOVF9vJqlfui6SDB5Jl4oBSq.png',
+                    lien: 'https://store.playstation.com/'
+                },
+                {
+                    titre: 'Baldur\'s Gate 3',
+                    platform: 'pc',
+                    ancien_prix: '59.99',
+                    nouveau_prix: '44.99',
+                    reduction: 25,
+                    store: 'Steam',
+                    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/header.jpg',
+                    lien: 'https://store.steampowered.com/app/1086940/'
+                },
+                {
+                    titre: 'Hogwarts Legacy',
+                    platform: 'ps',
+                    ancien_prix: '59.99',
+                    nouveau_prix: '29.99',
+                    reduction: 50,
+                    store: 'PlayStation Store',
+                    image: 'https://cdn1.epicgames.com/offer/e97659b501af4e3981d5430dad170911/EGS_HogwartsLegacy_AvalancheSoftware_S1_2560x1440-2baf3188eb3c1aa248bcc1af6a927b7e',
+                    lien: 'https://store.playstation.com/'
+                }
+            ];
+        }
         
         function displayPromos(promos) {
             const container = document.getElementById('container');
@@ -366,7 +384,7 @@
                     <div class="image" style="background-image: url('${p.image}');"></div>
                     <div class="content">
                         <h2 class="title">${p.titre}</h2>
-                        <span class="platform">${p.store}</span>
+                        <span class="store">${p.store}</span>
                         <div class="prices">
                             <span class="old-price">${p.ancien_prix}€</span>
                             <span class="new-price">${p.nouveau_prix}€</span>
@@ -388,7 +406,10 @@
         }
         
         // Charger au démarrage
-        setTimeout(() => displayPromos(allPromos), 1000);
+        setTimeout(() => loadPromos(), 1000);
+        
+        // Recharger toutes les 5 minutes
+        setInterval(loadPromos, 5 * 60 * 1000);
     </script>
 </body>
 </html>
