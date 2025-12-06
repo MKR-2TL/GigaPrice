@@ -15,18 +15,6 @@
             min-height: 100vh;
         }
         
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 50%, rgba(138, 16, 219, 0.1) 0%, transparent 50%);
-            z-index: -1;
-            pointer-events: none;
-        }
-        
         nav {
             display: flex;
             justify-content: center;
@@ -55,11 +43,6 @@
             background: rgba(138, 16, 219, 0.2);
         }
         
-        nav a:hover {
-            color: #fff;
-            background: rgba(138, 16, 219, 0.15);
-        }
-        
         .header {
             text-align: center;
             padding: 60px 20px 40px;
@@ -69,18 +52,11 @@
             font-size: 3em;
             font-weight: 800;
             color: #fff;
-            margin-bottom: 12px;
-        }
-        
-        .header p {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 1.1em;
         }
         
         .loading {
             text-align: center;
             padding: 100px 20px;
-            font-size: 1.2em;
             color: rgba(255, 255, 255, 0.6);
         }
         
@@ -116,10 +92,10 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 0.9em;
+            font-family: 'Inter', sans-serif;
         }
         
-        .filter-btn:hover, .filter-btn.active {
+        .filter-btn.active {
             background: rgba(138, 16, 219, 0.2);
             border-color: rgba(138, 16, 219, 0.3);
             color: #fff;
@@ -136,7 +112,6 @@
         
         .card {
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.05);
             overflow: hidden;
@@ -146,7 +121,6 @@
         
         .card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
             border-color: rgba(138, 16, 219, 0.3);
         }
         
@@ -160,6 +134,39 @@
             font-weight: 700;
             font-size: 0.9em;
             z-index: 10;
+        }
+        
+        /* BADGE PLATEFORME */
+        .platform-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85em;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+        }
+        
+        .platform-badge.pc {
+            background: rgba(138, 16, 219, 0.9);
+            border: 1px solid rgba(138, 16, 219, 1);
+        }
+        
+        .platform-badge.ps5 {
+            background: rgba(0, 112, 204, 0.9);
+            border: 1px solid rgba(0, 112, 204, 1);
+        }
+        
+        .platform-badge.xbox {
+            background: rgba(16, 124, 16, 0.9);
+            border: 1px solid rgba(16, 124, 16, 1);
+        }
+        
+        .platform-badge.switch {
+            background: rgba(230, 0, 18, 0.9);
+            border: 1px solid rgba(230, 0, 18, 1);
         }
         
         .image {
@@ -187,7 +194,6 @@
             border-radius: 12px;
             font-size: 0.8em;
             margin-bottom: 12px;
-            color: rgba(255, 255, 255, 0.8);
         }
         
         .prices {
@@ -221,36 +227,6 @@
             text-decoration: none;
             display: block;
             text-align: center;
-            transition: all 0.3s;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(138, 16, 219, 0.4);
-        }
-        
-        .discord-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #5865F2;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9em;
-            z-index: 2000;
-        }
-
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            margin-top: 80px;
-            background: rgba(10, 10, 15, 0.8);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.9em;
         }
 
         @media (max-width: 768px) {
@@ -259,8 +235,6 @@
     </style>
 </head>
 <body>
-    <a href="https://discord.gg/kSFqRNyn" class="discord-btn" target="_blank">Discord</a>
-
     <nav>
         <a href="index.html">Accueil</a>
         <a href="promo.html" class="active">Promotions</a>
@@ -271,15 +245,15 @@
 
     <div class="header">
         <h1>🔥 Promotions</h1>
-        <p>Les meilleures offres gaming mises à jour quotidiennement</p>
+        <p style="color: rgba(255,255,255,0.6); margin-top: 12px;">Mises à jour quotidiennes</p>
     </div>
 
     <div class="filters">
         <button class="filter-btn active" onclick="filterBy('all')">Toutes</button>
-        <button class="filter-btn" onclick="filterBy('pc')">PC</button>
-        <button class="filter-btn" onclick="filterBy('ps')">PlayStation</button>
-        <button class="filter-btn" onclick="filterBy('xbox')">Xbox</button>
-        <button class="filter-btn" onclick="filterBy('switch')">Switch</button>
+        <button class="filter-btn" onclick="filterBy('pc')">💻 PC</button>
+        <button class="filter-btn" onclick="filterBy('ps5')">🎮 PlayStation</button>
+        <button class="filter-btn" onclick="filterBy('xbox')">🟢 Xbox</button>
+        <button class="filter-btn" onclick="filterBy('switch')">🔴 Switch</button>
     </div>
 
     <div id="container">
@@ -289,97 +263,64 @@
         </div>
     </div>
 
-    <footer>
-        © 2025 GigaPrice - Tous droits réservés
-    </footer>
-
     <script>
         let allPromos = [];
         
-        // URL du fichier JSON sur GitHub (à remplacer par ton URL)
-        const DATA_URL = 'https://raw.githubusercontent.com/TON_USERNAME/TON_REPO/main/data/promo_pc.json';
-        
+        // ============================================
+        // CHARGE LES 4 FICHIERS JSON (UN PAR PLATEFORME)
+        // ============================================
         async function loadPromos() {
             try {
-                // CHARGE LES VRAIS FICHIERS JSON
-                const response = await fetch('https://raw.githubusercontent.com/MKR-2TL/GigaPrice/main/data/promo_pc.json');
-                const data = await response.json();
-                allPromos = data;
+                console.log('📥 Chargement des promotions...');
+                
+                // Charger les 4 fichiers JSON depuis GitHub
+                const [pc, ps5, xbox, sw] = await Promise.all([
+                    fetch('https://raw.githubusercontent.com/MKR-2TL/GigaPrice/main/data/promo_pc.json').then(r => r.json()),
+                    fetch('https://raw.githubusercontent.com/MKR-2TL/GigaPrice/main/data/promo_ps5.json').then(r => r.json()),
+                    fetch('https://raw.githubusercontent.com/MKR-2TL/GigaPrice/main/data/promo_xbox.json').then(r => r.json()),
+                    fetch('https://raw.githubusercontent.com/MKR-2TL/GigaPrice/main/data/promo_switch.json').then(r => r.json())
+                ]);
+                
+                // Ajouter la plateforme à chaque jeu
+                allPromos = [
+                    ...pc.map(p => ({...p, platform: 'pc'})),
+                    ...ps5.map(p => ({...p, platform: 'ps5'})),
+                    ...xbox.map(p => ({...p, platform: 'xbox'})),
+                    ...sw.map(p => ({...p, platform: 'switch'}))
+                ];
+                
+                console.log(`✅ ${allPromos.length} promos chargées`);
+                console.log(`   PC: ${pc.length}, PS5: ${ps5.length}, Xbox: ${xbox.length}, Switch: ${sw.length}`);
+                
                 displayPromos(allPromos);
+                
             } catch (error) {
-                // En cas d'erreur, utilise les données de démo
-                console.log('Utilisation des données de démo');
-                allPromos = generateDemoData();
-                displayPromos(allPromos);
+                console.error('❌ Erreur chargement:', error);
+                showError();
             }
         }
         
-        function generateDemoData() {
-            // Données temporaires (sera remplacé par les vraies promos)
-            return [
-                {
-                    titre: 'Elden Ring',
-                    platform: 'pc',
-                    ancien_prix: '59.99',
-                    nouveau_prix: '29.99',
-                    reduction: 50,
-                    store: 'Steam',
-                    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/header.jpg',
-                    lien: 'https://store.steampowered.com/app/1245620/'
-                },
-                {
-                    titre: 'Cyberpunk 2077',
-                    platform: 'pc',
-                    ancien_prix: '59.99',
-                    nouveau_prix: '19.99',
-                    reduction: 67,
-                    store: 'GOG',
-                    image: 'https://image.api.playstation.com/vulcan/ap/rnd/202111/3013/cKZ4tKNFj9C00giTzYtH8PF1.png',
-                    lien: 'https://www.gog.com/game/cyberpunk_2077'
-                },
-                {
-                    titre: 'Red Dead Redemption 2',
-                    platform: 'ps',
-                    ancien_prix: '59.99',
-                    nouveau_prix: '24.99',
-                    reduction: 58,
-                    store: 'PlayStation Store',
-                    image: 'https://image.api.playstation.com/cdn/UP1004/CUSA03041_00/Hpl5MtwQgOVF9vJqlfui6SDB5Jl4oBSq.png',
-                    lien: 'https://store.playstation.com/'
-                },
-                {
-                    titre: 'Baldur\'s Gate 3',
-                    platform: 'pc',
-                    ancien_prix: '59.99',
-                    nouveau_prix: '44.99',
-                    reduction: 25,
-                    store: 'Steam',
-                    image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/header.jpg',
-                    lien: 'https://store.steampowered.com/app/1086940/'
-                },
-                {
-                    titre: 'Hogwarts Legacy',
-                    platform: 'ps',
-                    ancien_prix: '59.99',
-                    nouveau_prix: '29.99',
-                    reduction: 50,
-                    store: 'PlayStation Store',
-                    image: 'https://cdn1.epicgames.com/offer/e97659b501af4e3981d5430dad170911/EGS_HogwartsLegacy_AvalancheSoftware_S1_2560x1440-2baf3188eb3c1aa248bcc1af6a927b7e',
-                    lien: 'https://store.playstation.com/'
-                }
-            ];
+        function getPlatformName(platform) {
+            const names = {
+                'pc': 'PC',
+                'ps5': 'PlayStation 5',
+                'xbox': 'Xbox Series X|S',
+                'switch': 'Nintendo Switch'
+            };
+            return names[platform] || platform;
         }
         
         function displayPromos(promos) {
             const container = document.getElementById('container');
             
             if (promos.length === 0) {
-                container.innerHTML = '<div class="loading"><p>🔍 Aucune promotion trouvée</p></div>';
+                container.innerHTML = '<div class="loading"><p>🔍 Aucune promotion disponible</p></div>';
                 return;
             }
             
             const html = `<div class="grid">${promos.map(p => `
                 <div class="card" data-platform="${p.platform}">
+                    <div class="platform-badge ${p.platform}">${getPlatformName(p.platform)}</div>
                     <div class="badge">-${p.reduction}%</div>
                     <div class="image" style="background-image: url('${p.image}');"></div>
                     <div class="content">
@@ -389,7 +330,7 @@
                             <span class="old-price">${p.ancien_prix}€</span>
                             <span class="new-price">${p.nouveau_prix}€</span>
                         </div>
-                        <a href="${p.lien}" target="_blank" class="btn">Voir l'offre</a>
+                        <a href="${p.lien}" target="_blank" class="btn">Acheter sur ${p.store}</a>
                     </div>
                 </div>
             `).join('')}</div>`;
@@ -398,19 +339,35 @@
         }
         
         function filterBy(platform) {
+            // Changer le bouton actif
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
             
-            const filtered = platform === 'all' ? allPromos : allPromos.filter(p => p.platform === platform);
-            displayPromos(filtered);
+            // Filtrer les jeux
+            if (platform === 'all') {
+                displayPromos(allPromos);
+            } else {
+                const filtered = allPromos.filter(p => p.platform === platform);
+                console.log(`Filtré ${platform}: ${filtered.length} jeux`);
+                displayPromos(filtered);
+            }
+        }
+        
+        function showError() {
+            document.getElementById('container').innerHTML = `
+                <div class="loading">
+                    <p style="font-size: 1.5em; margin-bottom: 20px;">⚠️ Impossible de charger les promotions</p>
+                    <p style="color: rgba(255,255,255,0.6);">Vérifie que les fichiers JSON sont bien sur GitHub</p>
+                    <p style="color: rgba(255,255,255,0.6); margin-top: 10px;">Dans le dossier: <code>data/</code></p>
+                </div>
+            `;
         }
         
         // Charger au démarrage
-        setTimeout(() => loadPromos(), 1000);
+        loadPromos();
         
         // Recharger toutes les 5 minutes
         setInterval(loadPromos, 5 * 60 * 1000);
     </script>
 </body>
 </html>
-
