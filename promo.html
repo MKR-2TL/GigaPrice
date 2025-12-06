@@ -3,17 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GigaPrice - Promotions</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <title>GigaPrice - Promotions Gaming</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Poppins', 'Lato', sans-serif;
+            font-family: 'Poppins', sans-serif;
             color: white;
-            overflow-x: hidden;
             background: linear-gradient(-45deg, #2d1b4e, #4a2c6e, #6b4791, #8a5fb5);
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
@@ -26,72 +23,63 @@
             100% { background-position: 0% 50%; }
         }
         
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 50% 50%, rgba(102, 126, 234, 0.15) 0%, rgba(0, 0, 0, 0.3) 100%);
-            z-index: -1;
-            pointer-events: none;
-        }
-        
         nav {
             display: flex;
             justify-content: center;
-            align-items: center;
             gap: 40px;
             padding: 25px 20px;
             background: rgba(0, 0, 0, 0.25);
-            backdrop-filter: blur(20px) saturate(180%);
+            backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.15);
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
         }
         
         nav a {
             color: white;
             text-decoration: none;
             font-weight: 600;
-            font-size: 1.05em;
             padding: 10px 20px;
             border-radius: 12px;
             transition: all 0.3s;
-            letter-spacing: 0.5px;
         }
         
         nav a.active { background: rgba(255, 255, 255, 0.15); }
-        nav a:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-2px); }
+        nav a:hover { background: rgba(255, 255, 255, 0.2); }
         
-        .promo-header {
+        .header {
             text-align: center;
             padding: 60px 20px 40px;
         }
         
-        .promo-header h1 {
+        .header h1 {
             font-size: 4em;
             font-weight: 900;
-            margin-bottom: 15px;
             background: linear-gradient(135deg, #ff4444, #ffd700);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 40px rgba(255, 68, 68, 0.5));
-            animation: titleGlow 3s ease-in-out infinite;
         }
         
-        @keyframes titleGlow {
-            0%, 100% { filter: drop-shadow(0 0 40px rgba(255, 68, 68, 0.5)); }
-            50% { filter: drop-shadow(0 0 60px rgba(255, 215, 0, 0.8)); }
+        .loading {
+            text-align: center;
+            padding: 100px 20px;
+            font-size: 1.5em;
         }
         
-        .promo-header p {
-            font-size: 1.3em;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 10px;
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 30px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         .filters {
@@ -105,24 +93,20 @@
         .filter-btn {
             padding: 12px 30px;
             background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
             border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 30px;
             color: white;
             font-weight: 600;
-            font-size: 1em;
             cursor: pointer;
             transition: all 0.3s;
-            font-family: 'Poppins', sans-serif;
         }
         
         .filter-btn:hover, .filter-btn.active {
             background: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 215, 0, 0.6);
-            transform: translateY(-2px);
         }
         
-        .promo-grid {
+        .grid {
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
@@ -131,59 +115,48 @@
             gap: 30px;
         }
         
-        .promo-card {
+        .card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
             border-radius: 20px;
             border: 2px solid rgba(255, 255, 255, 0.2);
             overflow: hidden;
             transition: all 0.4s;
-            opacity: 0;
-            animation: fadeInUp 0.6s ease forwards;
+            position: relative;
         }
         
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .promo-card:hover {
+        .card:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-            border-color: rgba(255, 215, 0, 0.5);
         }
         
-        .promo-badge {
+        .badge {
             position: absolute;
             top: 15px;
             right: 15px;
-            background: linear-gradient(135deg, #ff4444, #ff6b6b);
-            color: white;
+            background: #ff4444;
             padding: 8px 20px;
             border-radius: 20px;
             font-weight: 800;
-            font-size: 1.1em;
             z-index: 10;
         }
         
-        .promo-image {
+        .image {
             width: 100%;
             height: 200px;
             background-size: cover;
             background-position: center;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
         }
         
-        .promo-content { padding: 25px; }
+        .content { padding: 25px; }
         
-        .promo-title {
+        .title {
             font-size: 1.5em;
             font-weight: 700;
             margin-bottom: 10px;
-            color: white;
         }
         
-        .promo-platform {
+        .platform {
             display: inline-block;
             padding: 5px 15px;
             background: rgba(138, 16, 219, 0.3);
@@ -192,7 +165,7 @@
             margin-bottom: 15px;
         }
         
-        .promo-prices {
+        .prices {
             display: flex;
             align-items: baseline;
             gap: 15px;
@@ -208,28 +181,10 @@
         .new-price {
             font-size: 2em;
             font-weight: 900;
-            background: linear-gradient(135deg, #ffd700, #ffed4e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #ffd700;
         }
         
-        .promo-economy {
-            font-size: 0.9em;
-            color: #4ade80;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-        
-        .store-tag {
-            display: inline-block;
-            padding: 6px 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            font-size: 0.85em;
-            margin-bottom: 15px;
-        }
-        
-        .promo-btn {
+        .btn {
             width: 100%;
             padding: 14px;
             background: linear-gradient(135deg, #8a10db, #c710db);
@@ -237,166 +192,203 @@
             border-radius: 15px;
             color: white;
             font-weight: 700;
-            font-size: 1em;
             cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Poppins', sans-serif;
-        }
-        
-        .promo-btn:hover {
-            background: linear-gradient(135deg, #9a20eb, #d720eb);
-            transform: translateY(-2px);
-        }
-        
-        footer {
+            text-decoration: none;
+            display: block;
             text-align: center;
-            padding: 30px 20px;
-            margin-top: 80px;
-            background: rgba(0, 0, 0, 0.2);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        .floating-discord-btn {
+        .discord-btn {
             position: fixed;
             top: 30px;
             right: 30px;
-            background: rgba(88, 101, 242, 0.9);
+            background: #5865F2;
             color: white;
             padding: 14px 28px;
             border-radius: 50px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
             text-decoration: none;
             font-weight: 700;
             z-index: 2000;
-            transition: all 0.3s;
         }
-        
-        .floating-discord-btn:hover {
-            transform: translateY(-3px) scale(1.05);
+
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <a href="https://discord.gg/kSFqRNyn" class="floating-discord-btn" target="_blank">
-        <svg width="26" height="26" viewBox="0 0 71 55" fill="white" xmlns="http://www.w3.org/2000/svg">
-            <path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718 48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z"/>
-        </svg>
-        Discord
-    </a>
+    <a href="https://discord.gg/kSFqRNyn" class="discord-btn" target="_blank">Discord</a>
 
     <nav>
-        <a href="promo.html" class="active">Promo</a>
-        <a href="index.html">Nouveautés</a>
-        <a href="top-jeux.html">Top Jeux</a>
-        <a href="index.html">Vote</a>
         <a href="index.html">Accueil</a>
+        <a href="promo.html" class="active">Promotions</a>
+        <a href="https://discord.gg/kSFqRNyn" target="_blank">Community</a>
     </nav>
 
-    <div class="promo-header">
+    <div class="header">
         <h1>🔥 Promotions</h1>
-        <p>Les meilleures offres du moment</p>
-        <p style="font-size: 1em; color: rgba(255,255,255,0.7); font-style: italic;">Mis à jour quotidiennement</p>
+        <p style="margin-top: 15px; font-size: 1.2em;">Les meilleures offres gaming</p>
     </div>
 
     <div class="filters">
-        <button class="filter-btn active" onclick="filterPromos('all')">Toutes</button>
-        <button class="filter-btn" onclick="filterPromos('pc')">PC</button>
-        <button class="filter-btn" onclick="filterPromos('playstation')">PlayStation</button>
-        <button class="filter-btn" onclick="filterPromos('xbox')">Xbox</button>
-        <button class="filter-btn" onclick="filterPromos('nintendo')">Nintendo</button>
+        <button class="filter-btn active" onclick="filterBy('all')">Toutes</button>
+        <button class="filter-btn" onclick="filterBy('pc')">PC</button>
+        <button class="filter-btn" onclick="filterBy('ps')">PlayStation</button>
+        <button class="filter-btn" onclick="filterBy('xbox')">Xbox</button>
+        <button class="filter-btn" onclick="filterBy('switch')">Switch</button>
     </div>
 
-    <div class="promo-grid" id="promo-grid"></div>
-
-    <footer>
-        © 2025 GigaPrice - Tous droits réservés<br>
-        <small style="opacity: 0.6;">Comparateur de prix pour gamers passionnés</small>
-    </footer>
+    <div id="container">
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Chargement des promotions...</p>
+        </div>
+    </div>
 
     <script>
-        let allPromos = [];
-        
-        async function loadPromotions() {
-            try {
-                const t = Date.now(); // Anti-cache
-                
-                const [pc, ps5, xbox, sw] = await Promise.all([
-                    fetch(`./data/promo_pc.json?t=${t}`).then(r => r.json()),
-                    fetch(`./data/promo_ps5.json?t=${t}`).then(r => r.json()),
-                    fetch(`./data/promo_xbox.json?t=${t}`).then(r => r.json()),
-                    fetch(`./data/promo_switch.json?t=${t}`).then(r => r.json())
-                ]);
-                
-                allPromos = [
-                    ...pc.map(p => ({...p, platform: 'pc'})),
-                    ...ps5.map(p => ({...p, platform: 'playstation'})),
-                    ...xbox.map(p => ({...p, platform: 'xbox'})),
-                    ...sw.map(p => ({...p, platform: 'nintendo'}))
-                ];
-                
-                console.log('✅ Promos chargées:', allPromos.length);
-                displayPromotions(allPromos);
-                
-            } catch (error) {
-                console.error('❌ Erreur:', error);
-                document.getElementById('promo-grid').innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
-                        <h2>🔍 Aucun résultat trouvé</h2>
-                        <p style="margin: 20px 0; font-size: 1.1em;">Aucune promotion disponible pour le moment.</p>
-                        <p style="margin-bottom: 20px; color: rgba(255,255,255,0.7);">Faites remonter le problème au support Discord</p>
-                        <a href="https://discord.gg/kSFqRNyn" target="_blank" style="display: inline-block; margin-top:20px; padding:14px 30px; background:#5865F2; border:none; border-radius:10px; color:white; text-decoration:none; font-weight:700;">Contacter le support</a>
-                    </div>
-                `;
+        // 🎮 DONNÉES DE DÉMO - Remplace par tes vraies données plus tard
+        const DEMO_GAMES = [
+            {
+                titre: 'Elden Ring',
+                platform: 'pc',
+                ancien_prix: '59.99',
+                nouveau_prix: '29.99',
+                reduction: 50,
+                store: 'Steam',
+                image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/header.jpg',
+                lien: 'https://discord.gg/kSFqRNyn'
+            },
+            {
+                titre: 'Cyberpunk 2077',
+                platform: 'pc',
+                ancien_prix: '59.99',
+                nouveau_prix: '19.99',
+                reduction: 67,
+                store: 'GOG',
+                image: 'https://image.api.playstation.com/vulcan/ap/rnd/202111/3013/cKZ4tKNFj9C00giTzYtH8PF1.png',
+                lien: 'https://discord.gg/kSFqRNyn'
+            },
+            {
+                titre: 'Red Dead Redemption 2',
+                platform: 'ps',
+                ancien_prix: '59.99',
+                nouveau_prix: '24.99',
+                reduction: 58,
+                store: 'PlayStation Store',
+                image: 'https://image.api.playstation.com/cdn/UP1004/CUSA03041_00/Hpl5MtwQgOVF9vJqlfui6SDB5Jl4oBSq.png',
+                lien: 'https://discord.gg/kSFqRNyn'
+            },
+            {
+                titre: 'God of War',
+                platform: 'ps',
+                ancien_prix: '49.99',
+                nouveau_prix: '19.99',
+                reduction: 60,
+                store: 'PlayStation Store',
+                image: 'https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/4xJ8XB3bi888QTLZYdl7Oi0s.png',
+                lien: 'https://discord.gg/kSFqRNyn'
+            },
+            {
+                titre: 'Forza Horizon 5',
+                platform: 'xbox',
+                ancien_prix: '59.99',
+                nouveau_prix: '29.99',
+                reduction: 50,
+                store: 'Xbox Store',
+                image: 'https://cdn1.epicgames.com/spt-assets/5e0c05e3d74b423b9f16f50d20c0abeb/forza-horizon-5-logo-1elew.png',
+                lien: 'https://discord.gg/kSFqRNyn'
+            },
+            {
+                titre: 'Halo Infinite',
+                platform: 'xbox',
+                ancien_prix: '59.99',
+                nouveau_prix: '19.99',
+                reduction: 67,
+                store: 'Xbox Store',
+                image: 'https://cdn2.unrealengine.com/egs-haloinfinite-343industries-g1a-05-1920x1080-d89e5f2969fb.jpg',
+                lien: 'https://discord.gg/kSFqRNyn'
+            },
+            {
+                titre: 'Zelda: Tears of the Kingdom',
+                platform: 'switch',
+                ancien_prix: '69.99',
+                nouveau_prix: '49.99',
+                reduction: 29,
+                store: 'Nintendo eShop',
+                image: 'https://assets.nintendo.com/image/upload/ar_16:9,c_lpad,w_1240/b_white/f_auto/q_auto/ncom/software/switch/70010000063713/8b3c3a7e-ce0c-47e9-af15-10fe73c01cb0',
+                lien: 'https://discord.gg/kSFqRNyn'
+            },
+            {
+                titre: 'Super Mario Odyssey',
+                platform: 'switch',
+                ancien_prix: '59.99',
+                nouveau_prix: '39.99',
+                reduction: 33,
+                store: 'Nintendo eShop',
+                image: 'https://assets.nintendo.com/image/upload/ar_16:9,c_lpad,w_1240/b_white/f_auto/q_auto/ncom/software/switch/70010000001130/c42553b4fd0312c31e70ec7468c6c9bccd739f340152925b9600631f2d29f8b5',
+                lien: 'https://discord.gg/kSFqRNyn'
+            },
+            {
+                titre: 'Baldur\'s Gate 3',
+                platform: 'pc',
+                ancien_prix: '59.99',
+                nouveau_prix: '44.99',
+                reduction: 25,
+                store: 'Steam',
+                image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/header.jpg',
+                lien: 'https://discord.gg/kSFqRNyn'
+            },
+            {
+                titre: 'Hogwarts Legacy',
+                platform: 'ps',
+                ancien_prix: '59.99',
+                nouveau_prix: '29.99',
+                reduction: 50,
+                store: 'PlayStation Store',
+                image: 'https://cdn1.epicgames.com/offer/e97659b501af4e3981d5430dad170911/EGS_HogwartsLegacy_AvalancheSoftware_S1_2560x1440-2baf3188eb3c1aa248bcc1af6a927b7e',
+                lien: 'https://discord.gg/kSFqRNyn'
             }
-        }
+        ];
+
+        let allPromos = DEMO_GAMES;
         
-        function displayPromotions(promos) {
-            const grid = document.getElementById('promo-grid');
+        function displayPromos(promos) {
+            const container = document.getElementById('container');
             
             if (promos.length === 0) {
-                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:50px;"><h2>🔍 Aucune promotion</h2></div>';
+                container.innerHTML = '<div class="loading"><p>🔍 Aucune promotion trouvée</p></div>';
                 return;
             }
             
-            grid.innerHTML = promos.map((p, i) => `
-                <div class="promo-card" data-platform="${p.platform}" style="animation-delay:${i * 0.05}s;">
-                    <div class="promo-badge">-${p.reduction}%</div>
-                    <div class="promo-image" style="background-image: url('${p.image}');"></div>
-                    <div class="promo-content">
-                        <h2 class="promo-title">${p.titre}</h2>
-                        <span class="promo-platform">${getPlatformName(p.platform)}</span>
-                        <div class="promo-prices">
+            const html = `<div class="grid">${promos.map(p => `
+                <div class="card" data-platform="${p.platform}">
+                    <div class="badge">-${p.reduction}%</div>
+                    <div class="image" style="background-image: url('${p.image}');"></div>
+                    <div class="content">
+                        <h2 class="title">${p.titre}</h2>
+                        <span class="platform">${p.store}</span>
+                        <div class="prices">
                             <span class="old-price">${p.ancien_prix}€</span>
                             <span class="new-price">${p.nouveau_prix}€</span>
                         </div>
-                        <p class="promo-economy">✓ Économise ${(parseFloat(p.ancien_prix) - parseFloat(p.nouveau_prix)).toFixed(2)}€</p>
-                        <span class="store-tag">${p.store}</span>
-                        <a href="${p.lien}" target="_blank" style="text-decoration:none;">
-                            <button class="promo-btn">Voir l'offre</button>
-                        </a>
+                        <a href="${p.lien}" target="_blank" class="btn">Voir l'offre</a>
                     </div>
                 </div>
-            `).join('');
+            `).join('')}</div>`;
+            
+            container.innerHTML = html;
         }
         
-        function getPlatformName(p) {
-            return {pc: 'PC', playstation: 'PlayStation 5', xbox: 'Xbox Series X|S', nintendo: 'Nintendo Switch'}[p] || p;
-        }
-        
-        function filterPromos(platform) {
+        function filterBy(platform) {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
             
-            displayPromotions(platform === 'all' ? allPromos : allPromos.filter(p => p.platform === platform));
+            const filtered = platform === 'all' ? allPromos : allPromos.filter(p => p.platform === platform);
+            displayPromos(filtered);
         }
         
-        // CHARGER AU DÉMARRAGE
-        loadPromotions();
-        
-        // RECHARGER AUTOMATIQUEMENT TOUTES LES 5 MINUTES
-        setInterval(loadPromotions, 5 * 60 * 1000);
+        // Charger au démarrage
+        setTimeout(() => displayPromos(allPromos), 1000);
     </script>
 </body>
 </html>
