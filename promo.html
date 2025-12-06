@@ -79,7 +79,6 @@
             background: linear-gradient(135deg, #ff4444, #ffd700);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
             filter: drop-shadow(0 0 40px rgba(255, 68, 68, 0.5));
             animation: titleGlow 3s ease-in-out infinite;
         }
@@ -212,7 +211,6 @@
             background: linear-gradient(135deg, #ffd700, #ffed4e);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
         
         .promo-economy {
@@ -345,9 +343,10 @@
                 console.error('❌ Erreur:', error);
                 document.getElementById('promo-grid').innerHTML = `
                     <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
-                        <h2>❌ Erreur de chargement</h2>
-                        <p>Impossible de charger les promotions. Le bot a-t-il été lancé ?</p>
-                        <button onclick="location.reload()" style="margin-top:20px; padding:10px 20px; background:#8a10db; border:none; border-radius:10px; color:white; cursor:pointer;">Réessayer</button>
+                        <h2>🔍 Aucun résultat trouvé</h2>
+                        <p style="margin: 20px 0; font-size: 1.1em;">Aucune promotion disponible pour le moment.</p>
+                        <p style="margin-bottom: 20px; color: rgba(255,255,255,0.7);">Faites remonter le problème au support Discord</p>
+                        <a href="https://discord.gg/kSFqRNyn" target="_blank" style="display: inline-block; margin-top:20px; padding:14px 30px; background:#5865F2; border:none; border-radius:10px; color:white; text-decoration:none; font-weight:700;">Contacter le support</a>
                     </div>
                 `;
             }
