@@ -25,7 +25,7 @@
             pointer-events: none;
         }
 
-        /* NAVBAR CENTRÉE */
+        /* NAVBAR */
         nav {
             display: flex;
             justify-content: center;
@@ -64,7 +64,7 @@
             color: #fff;
         }
 
-        /* AUTH - Positionné en haut à droite */
+        /* AUTH */
         .auth-container {
             position: fixed;
             top: 20px;
@@ -172,7 +172,33 @@
             margin-left: 8px;
         }
 
-        /* VIP CARD STATIQUE */
+        /* COUNTDOWN TIMER */
+        .auto-logout-timer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 0, 60, 0.9);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9em;
+            display: none;
+            z-index: 10000;
+            box-shadow: 0 4px 20px rgba(255, 0, 60, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .auto-logout-timer.show {
+            display: block;
+        }
+
+        /* VIP CARD */
         .vip-card {
             position: fixed;
             left: 30px; 
@@ -371,7 +397,7 @@
     </style>
 </head>
 <body>
-    <!-- VIP CARD STATIQUE -->
+    <!-- VIP CARD -->
     <div class="vip-card">
         <div class="vip-badge">
             <span>👑</span>
@@ -388,7 +414,12 @@
         </a>
     </div>
 
-    <!-- AUTH EN HAUT À DROITE -->
+    <!-- TIMER AUTO-LOGOUT -->
+    <div class="auto-logout-timer" id="logout-timer">
+        ⏱️ Déconnexion dans: <span id="timer-seconds">300</span>s
+    </div>
+
+    <!-- AUTH -->
     <div class="auth-container">
         <a href="#" class="discord-login-btn" id="login-btn">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
@@ -409,7 +440,7 @@
         </div>
     </div>
 
-    <!-- NAVBAR CENTRÉE -->
+    <!-- NAVBAR -->
     <nav>
         <div class="nav-links">
             <a href="index.html" class="active">Accueil</a>
@@ -476,26 +507,69 @@
             webManagerRole: '1446582422719303728'
         };
 
-        // DÉCONNEXION AUTO APRÈS 5MIN
-        let inactivityTimer;
+        // ============================================
+        // DÉCONNEXION AUTO APRÈS 5 MINUTES
+        // ============================================
+        let logoutTimer;
+        let countdownTimer;
+        let secondsRemaining = 300; // 5 minutes
         
-        function resetInactivityTimer() {
-            clearTimeout(inactivityTimer);
-            inactivityTimer = setTimeout(() => {
-                const userData = localStorage.getItem('discord_user');
-                if (userData) {
-                    localStorage.removeItem('discord_user');
-                    alert('⏰ Déconnexion automatique après 5 minutes d\'inactivité');
-                    window.location.reload();
+        function startAutoLogoutTimer() {
+            const userData = localStorage.getItem('discord_user');
+            if (!userData) return;
+
+            // Reset le compte à rebours
+            secondsRemaining = 300;
+            updateTimerDisplay();
+
+            // Clear les anciens timers
+            clearTimeout(logoutTimer);
+            clearInterval(countdownTimer);
+
+            // Timer principal de déconnexion
+            logoutTimer = setTimeout(() => {
+                console.log('⏰ Déconnexion automatique après 5 minutes');
+                localStorage.removeItem('discord_user');
+                alert('⏰ Déconnexion automatique après 5 minutes d\'inactivité');
+                window.location.reload();
+            }, 5 * 60 * 1000);
+
+            // Afficher le timer quand il reste 60 secondes
+            setTimeout(() => {
+                document.getElementById('logout-timer').classList.add('show');
+            }, 4 * 60 * 1000);
+
+            // Countdown visible
+            countdownTimer = setInterval(() => {
+                secondsRemaining--;
+                updateTimerDisplay();
+                
+                if (secondsRemaining <= 0) {
+                    clearInterval(countdownTimer);
                 }
-            }, 5 * 60 * 1000); // 5 minutes
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const timerElement = document.getElementById('timer-seconds');
+            if (timerElement) {
+                timerElement.textContent = secondsRemaining;
+            }
+        }
+
+        function resetAutoLogoutTimer() {
+            document.getElementById('logout-timer').classList.remove('show');
+            startAutoLogoutTimer();
         }
 
         // Reset timer sur toute activité
         ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'].forEach(event => {
-            document.addEventListener(event, resetInactivityTimer, true);
+            document.addEventListener(event, resetAutoLogoutTimer, true);
         });
 
+        // ============================================
+        // GESTION AUTH DISCORD
+        // ============================================
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
 
@@ -521,6 +595,8 @@
         });
 
         document.getElementById('logout-btn').addEventListener('click', () => {
+            clearTimeout(logoutTimer);
+            clearInterval(countdownTimer);
             localStorage.removeItem('discord_user');
             window.location.reload();
         });
@@ -537,6 +613,8 @@
 
         async function handleDiscordCallback(code) {
             try {
+                console.log('🔄 Authentification Discord...');
+                
                 const response = await fetch('/api/discord-auth', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -545,13 +623,18 @@
 
                 const data = await response.json();
 
-                if (!data.error) {
+                if (response.ok && !data.error) {
+                    console.log('✅ Authentification réussie');
                     localStorage.setItem('discord_user', JSON.stringify(data));
                     displayUser(data);
-                    resetInactivityTimer(); // Démarre le timer
+                    startAutoLogoutTimer();
+                } else {
+                    console.error('❌ Erreur auth:', data);
+                    alert('❌ Erreur d\'authentification. Vérifie que l\'API /api/discord-auth est bien déployée sur Vercel.');
                 }
             } catch (error) {
-                console.error('Erreur auth:', error);
+                console.error('❌ Erreur réseau:', error);
+                alert('❌ Impossible de se connecter à l\'API. Vérifie ta connexion et que l\'API Vercel est bien configurée.');
             } finally {
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
@@ -562,8 +645,17 @@
             if (userData) {
                 try {
                     const user = JSON.parse(userData);
+                    
+                    // Vérifier si la session n'est pas expirée (max 24h)
+                    const maxAge = 24 * 60 * 60 * 1000; // 24 heures
+                    if (user.timestamp && (Date.now() - user.timestamp) > maxAge) {
+                        console.log('🕐 Session expirée');
+                        localStorage.removeItem('discord_user');
+                        return;
+                    }
+                    
                     displayUser(user);
-                    resetInactivityTimer(); // Démarre le timer
+                    startAutoLogoutTimer();
                 } catch (e) {
                     localStorage.removeItem('discord_user');
                 }
@@ -582,6 +674,7 @@
             if (data.isWebManager) {
                 document.getElementById('admin-badge').style.display = 'inline-block';
                 document.getElementById('admin-link').style.display = 'block';
+                console.log('👑 Accès admin accordé');
             }
         }
 
