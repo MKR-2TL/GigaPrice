@@ -465,7 +465,7 @@
             try {
                 console.log('📥 Chargement des promos.. .');
                 
-                const response = await fetch('/api/get-pending-promos');
+                const response = await fetch('https://giga-pricexyz.vercel.app/api/get-pending-promos');
                 
                 if (!response.ok) {
                     throw new Error(`API error: ${response.status}`);
