@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GigaPrice V0.4 - Comparateur de prix gaming</title>
+    <title>GigaPrice V0.5 - Comparateur de prix gaming</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -25,7 +25,6 @@
             pointer-events: none;
         }
 
-        /* NAVBAR */
         nav {
             display: flex;
             justify-content: center;
@@ -64,7 +63,6 @@
             color: #fff;
         }
 
-        /* AUTH */
         .auth-container {
             position: fixed;
             top: 20px;
@@ -172,7 +170,6 @@
             margin-left: 8px;
         }
 
-        /* COUNTDOWN TIMER */
         .auto-logout-timer {
             position: fixed;
             bottom: 20px;
@@ -198,7 +195,7 @@
             display: block;
         }
 
-        /* VIP CARD */
+        /* VIP CARD ANIMÉE ET STICKY */
         .vip-card {
             position: fixed;
             left: 30px; 
@@ -211,6 +208,19 @@
             width: 260px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             z-index: 100;
+            transition: all 0.3s ease;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .vip-card:hover {
+            transform: scale(1.05) translateY(-5px) !important;
+            box-shadow: 0 12px 48px rgba(138, 16, 219, 0.4);
+            border-color: rgba(138, 16, 219, 0.6);
         }
 
         .vip-badge {
@@ -224,6 +234,12 @@
             font-weight: 700;
             font-size: 0.9em;
             margin-bottom: 16px;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { box-shadow: 0 0 10px rgba(138, 16, 219, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(138, 16, 219, 0.6), 0 0 30px rgba(138, 16, 219, 0.4); }
         }
 
         .vip-card h3 {
@@ -251,6 +267,12 @@
             font-size: 2.2em;
             font-weight: 800;
             color: #8a10db;
+            animation: priceGlow 2s infinite;
+        }
+
+        @keyframes priceGlow {
+            0%, 100% { text-shadow: 0 0 10px rgba(138, 16, 219, 0.5); }
+            50% { text-shadow: 0 0 20px rgba(138, 16, 219, 0.8), 0 0 30px rgba(138, 16, 219, 0.6); }
         }
 
         .vip-btn {
@@ -265,9 +287,33 @@
             text-decoration: none;
             display: block;
             text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* HERO */
+        .vip-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .vip-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(138, 16, 219, 0.4);
+        }
+
         .hero {
             text-align: center;
             padding: 80px 20px 60px;
@@ -297,7 +343,6 @@
             margin-bottom: 40px;
         }
 
-        /* SEARCH */
         .search {
             max-width: 700px;
             margin: 0 auto;
@@ -341,7 +386,6 @@
             background: linear-gradient(135deg, #9d21f0, #5348e0);
         }
 
-        /* CARDS */
         .cards {
             max-width: 1200px;
             margin: 80px auto;
@@ -397,7 +441,7 @@
     </style>
 </head>
 <body>
-    <!-- VIP CARD -->
+    <!-- VIP CARD ANIMÉE ET STICKY -->
     <div class="vip-card">
         <div class="vip-badge">
             <span>👑</span>
@@ -454,7 +498,7 @@
     <!-- HERO -->
     <div class="hero">
         <h1>GigaPrice</h1>
-        <div class="version-badge">V0.4</div>
+        <div class="version-badge">V0.5 🚀</div>
         <p class="tagline">Le comparateur de prix gaming le plus complet</p>
         
         <div class="search">
@@ -494,7 +538,7 @@
     </div>
 
     <footer>
-        © 2025 GigaPrice V0.4 - Tous droits réservés<br>
+        © 2025 GigaPrice V0.5 - Tous droits réservés<br>
         <small>Comparateur indépendant - Prix mis à jour toutes les heures</small>
     </footer>
 
@@ -502,59 +546,35 @@
         const DISCORD_CONFIG = {
             clientId: '1446882468077768850',
             redirectUri: window.location.origin + '/',
-            scope: 'identify guilds.members.read',
-            guildId: '1446582422375370877',
-            webManagerRole: '1446582422719303728'
+            scope: 'identify guilds.members.read'
         };
 
-        // ============================================
-        // DÉCONNEXION AUTO APRÈS 5 MINUTES
-        // ============================================
-        let logoutTimer;
-        let countdownTimer;
-        let secondsRemaining = 300; // 5 minutes
+        let logoutTimer, countdownTimer;
+        let secondsRemaining = 300;
         
         function startAutoLogoutTimer() {
             const userData = localStorage.getItem('discord_user');
             if (!userData) return;
 
-            // Reset le compte à rebours
             secondsRemaining = 300;
-            updateTimerDisplay();
-
-            // Clear les anciens timers
             clearTimeout(logoutTimer);
             clearInterval(countdownTimer);
 
-            // Timer principal de déconnexion
             logoutTimer = setTimeout(() => {
-                console.log('⏰ Déconnexion automatique après 5 minutes');
                 localStorage.removeItem('discord_user');
-                alert('⏰ Déconnexion automatique après 5 minutes d\'inactivité');
+                alert('⏰ Déconnexion automatique après 5 minutes');
                 window.location.reload();
-            }, 5 * 60 * 1000);
+            }, 300000);
 
-            // Afficher le timer quand il reste 60 secondes
             setTimeout(() => {
                 document.getElementById('logout-timer').classList.add('show');
-            }, 4 * 60 * 1000);
+            }, 240000);
 
-            // Countdown visible
             countdownTimer = setInterval(() => {
                 secondsRemaining--;
-                updateTimerDisplay();
-                
-                if (secondsRemaining <= 0) {
-                    clearInterval(countdownTimer);
-                }
+                document.getElementById('timer-seconds').textContent = secondsRemaining;
+                if (secondsRemaining <= 0) clearInterval(countdownTimer);
             }, 1000);
-        }
-
-        function updateTimerDisplay() {
-            const timerElement = document.getElementById('timer-seconds');
-            if (timerElement) {
-                timerElement.textContent = secondsRemaining;
-            }
         }
 
         function resetAutoLogoutTimer() {
@@ -562,14 +582,10 @@
             startAutoLogoutTimer();
         }
 
-        // Reset timer sur toute activité
-        ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'].forEach(event => {
-            document.addEventListener(event, resetAutoLogoutTimer, true);
+        ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'].forEach(e => {
+            document.addEventListener(e, resetAutoLogoutTimer, true);
         });
 
-        // ============================================
-        // GESTION AUTH DISCORD
-        // ============================================
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
 
@@ -581,7 +597,7 @@
 
         document.getElementById('login-btn').addEventListener('click', (e) => {
             e.preventDefault();
-            loginWithDiscord();
+            window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CONFIG.clientId}&redirect_uri=${encodeURIComponent(DISCORD_CONFIG.redirectUri)}&response_type=code&scope=${encodeURIComponent(DISCORD_CONFIG.scope)}`;
         });
 
         document.getElementById('user-badge').addEventListener('click', () => {
@@ -601,20 +617,8 @@
             window.location.reload();
         });
 
-        function loginWithDiscord() {
-            const authUrl = `https://discord.com/api/oauth2/authorize?` +
-                `client_id=${DISCORD_CONFIG.clientId}` +
-                `&redirect_uri=${encodeURIComponent(DISCORD_CONFIG.redirectUri)}` +
-                `&response_type=code` +
-                `&scope=${encodeURIComponent(DISCORD_CONFIG.scope)}`;
-            
-            window.location.href = authUrl;
-        }
-
         async function handleDiscordCallback(code) {
             try {
-                console.log('🔄 Authentification Discord...');
-                
                 const response = await fetch('/api/discord-auth', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -624,17 +628,14 @@
                 const data = await response.json();
 
                 if (response.ok && !data.error) {
-                    console.log('✅ Authentification réussie');
                     localStorage.setItem('discord_user', JSON.stringify(data));
                     displayUser(data);
                     startAutoLogoutTimer();
                 } else {
-                    console.error('❌ Erreur auth:', data);
-                    alert('❌ Erreur d\'authentification. Vérifie que l\'API /api/discord-auth est bien déployée sur Vercel.');
+                    console.error('Auth error:', data);
                 }
             } catch (error) {
-                console.error('❌ Erreur réseau:', error);
-                alert('❌ Impossible de se connecter à l\'API. Vérifie ta connexion et que l\'API Vercel est bien configurée.');
+                console.error('Network error:', error);
             } finally {
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
@@ -645,15 +646,10 @@
             if (userData) {
                 try {
                     const user = JSON.parse(userData);
-                    
-                    // Vérifier si la session n'est pas expirée (max 24h)
-                    const maxAge = 24 * 60 * 60 * 1000; // 24 heures
-                    if (user.timestamp && (Date.now() - user.timestamp) > maxAge) {
-                        console.log('🕐 Session expirée');
+                    if (user.timestamp && (Date.now() - user.timestamp) > 86400000) {
                         localStorage.removeItem('discord_user');
                         return;
                     }
-                    
                     displayUser(user);
                     startAutoLogoutTimer();
                 } catch (e) {
@@ -664,27 +660,21 @@
 
         function displayUser(data) {
             document.getElementById('login-btn').style.display = 'none';
-            
-            const userBadge = document.getElementById('user-badge');
-            userBadge.classList.add('show');
-
+            document.getElementById('user-badge').classList.add('show');
             document.getElementById('user-avatar').src = data.user.avatar;
             document.getElementById('user-name').textContent = data.user.username;
 
             if (data.isWebManager) {
                 document.getElementById('admin-badge').style.display = 'inline-block';
                 document.getElementById('admin-link').style.display = 'block';
-                console.log('👑 Accès admin accordé');
             }
         }
 
         document.getElementById('search-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const query = document.getElementById('search-input').value.trim();
-            if (query) {
-                window.location.href = `resultats.html?q=${encodeURIComponent(query)}`;
-            }
+            if (query) window.location.href = `resultats.html?q=${encodeURIComponent(query)}`;
         });
     </script>
 </body>
-</html>
+</html>S
