@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GigaPrice - Comparateur de prix gaming</title>
+    <title>GigaPrice V0.2 - Comparateur de prix gaming</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -132,6 +132,17 @@
             margin-bottom: 12px;
         }
 
+        .version-badge {
+            display: inline-block;
+            background: rgba(138, 16, 219, 0.3);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            border: 1px solid rgba(138, 16, 219, 0.5);
+        }
+
         .tagline {
             font-size: 1.2em;
             color: rgba(255, 255, 255, 0.6);
@@ -177,7 +188,6 @@
             cursor: pointer;
         }
 
-        /* RÉSULTATS DE RECHERCHE */
         .search-results {
             position: absolute;
             top: 100%;
@@ -194,9 +204,7 @@
             z-index: 1000;
         }
 
-        .search-results.show {
-            display: block;
-        }
+        .search-results.show { display: block; }
 
         .search-result-item {
             display: flex;
@@ -213,8 +221,8 @@
         }
 
         .search-result-img {
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             border-radius: 8px;
             object-fit: cover;
         }
@@ -224,14 +232,125 @@
         }
 
         .search-result-title {
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 1.1em;
             color: #fff;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
         .search-result-meta {
-            font-size: 0.85em;
-            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* MODAL DE DÉTAILS */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .modal.show { display: flex; align-items: center; justify-content: center; }
+
+        .modal-content {
+            background: rgba(20, 20, 30, 0.95);
+            backdrop-filter: blur(30px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 900px;
+            width: 90%;
+            margin: 20px;
+        }
+
+        .modal-header {
+            position: relative;
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .modal-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(20, 20, 30, 1), transparent);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .modal-title {
+            font-size: 2em;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .modal-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .modal-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .stores-section h3 {
+            font-size: 1.3em;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .store-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .store-name {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .store-btn {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #8a10db, #4338ca);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
         }
 
         .loading-search {
@@ -302,6 +421,7 @@
             h1 { font-size: 2.5em; }
             .cards { grid-template-columns: 1fr; }
             .vip-card { display: none; }
+            .modal-content { width: 95%; }
         }
     </style>
 </head>
@@ -334,65 +454,73 @@
 
     <div class="hero">
         <h1>GigaPrice</h1>
+        <div class="version-badge">V0.2 🚀</div>
         <p class="tagline">Le comparateur de prix gaming le plus complet</p>
         
         <div class="search">
             <div class="search-bar">
                 <input type="text" id="search-input" placeholder="Rechercher un jeu... (ex: GTA, Minecraft, Elden Ring)">
-                <button onclick="searchGames()">Rechercher</button>
+                <button onclick="searchGames()">🔍 Rechercher</button>
             </div>
             <div class="search-results" id="search-results"></div>
+        </div>
+    </div>
+
+    <!-- MODAL DE DÉTAILS -->
+    <div class="modal" id="game-modal">
+        <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <h2 class="modal-title" id="modal-title"></h2>
+                <div class="modal-meta" id="modal-meta"></div>
+                <div class="modal-description" id="modal-description"></div>
+                
+                <div class="stores-section">
+                    <h3>🏪 Où acheter ce jeu ?</h3>
+                    <div id="stores-list"></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="cards">
         <div class="card">
             <h2>🔥 Promotions</h2>
-            <p>Découvre les meilleures offres du moment, mises à jour quotidiennement. Économise jusqu'à 90% sur tes jeux préférés.</p>
+            <p>Découvre les meilleures offres du moment, mises à jour quotidiennement. Économise jusqu'à 90%.</p>
         </div>
         <div class="card">
             <h2>💰 Comparateur</h2>
-            <p>Compare instantanément les prix sur Steam, Epic, GOG et 15+ autres stores. Trouve toujours le meilleur deal.</p>
+            <p>Compare instantanément les prix sur Steam, Epic, GOG et 15+ autres stores.</p>
         </div>
         <div class="card">
             <h2>🔔 Alertes Prix</h2>
-            <p>Reçois une notification Discord instantanée quand ton jeu atteint le prix désiré. Ne rate plus jamais une promo.</p>
+            <p>Reçois une notification Discord quand ton jeu atteint le prix désiré.</p>
         </div>
         <div class="card">
             <h2>📊 Historique</h2>
-            <p>Consulte l'évolution des prix sur 12 mois. Sache exactement quand acheter au meilleur moment.</p>
+            <p>Consulte l'évolution des prix sur 12 mois. Sache quand acheter.</p>
         </div>
         <div class="card">
             <h2>👥 Community</h2>
-            <p>Rejoins 1000+ gamers sur Discord. Partage tes bons plans et vote pour le jeu de la semaine.</p>
+            <p>Rejoins 1000+ gamers sur Discord. Partage tes bons plans.</p>
         </div>
         <div class="card">
-            <h2>🎮 Top Jeux</h2>
-            <p>Découvre les jeux les plus recherchés et les meilleurs deals de la communauté cette semaine.</p>
+            <h2>🎮 850k+ Jeux</h2>
+            <p>Recherche parmi 850 000+ jeux. Trouve toujours le meilleur prix.</p>
         </div>
     </div>
 
     <footer>
-        © 2025 GigaPrice - Tous droits réservés<br>
+        © 2025 GigaPrice V0.2 - Tous droits réservés<br>
         <small>Comparateur indépendant - Prix mis à jour toutes les heures</small>
     </footer>
 
     <script>
         const RAWG_API_KEY = 'ed6c45e2264a4c6aac17c4f3525362d9';
         let searchTimeout;
-        let gamesCache = [];
-
-        // Charger les jeux les plus populaires au démarrage
-        async function preloadGames() {
-            try {
-                const response = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&page_size=40&ordering=-rating,-added`);
-                const data = await response.json();
-                gamesCache = data.results || [];
-                console.log('✅', gamesCache.length, 'jeux populaires chargés');
-            } catch (error) {
-                console.error('Erreur préchargement:', error);
-            }
-        }
+        let currentGame = null;
 
         // Recherche en temps réel
         document.getElementById('search-input').addEventListener('input', (e) => {
@@ -421,9 +549,8 @@
             resultsDiv.classList.add('show');
             
             try {
-                // Recherche sur RAWG (base de données de 850 000+ jeux)
                 const response = await fetch(
-                    `https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(query)}&page_size=10&ordering=-rating,-added`
+                    `https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(query)}&page_size=8&ordering=-rating,-added`
                 );
                 const data = await response.json();
                 
@@ -444,15 +571,15 @@
             const resultsDiv = document.getElementById('search-results');
             
             const html = games.map(game => `
-                <div class="search-result-item" onclick="selectGame('${escapeHtml(game.name)}', ${game.id})">
-                    <img src="${game.background_image || 'https://via.placeholder.com/60'}" 
+                <div class="search-result-item" onclick='selectGame(${JSON.stringify(game).replace(/'/g, "&#39;")})'>
+                    <img src="${game.background_image || 'https://via.placeholder.com/80'}" 
                          alt="${game.name}" 
                          class="search-result-img"
-                         onerror="this.src='https://via.placeholder.com/60'">
+                         onerror="this.src='https://via.placeholder.com/80'">
                     <div class="search-result-info">
                         <div class="search-result-title">${game.name}</div>
                         <div class="search-result-meta">
-                            ${game.released ? game.released.split('-')[0] : 'N/A'} • 
+                            📅 ${game.released || 'N/A'} • 
                             ⭐ ${game.rating || 'N/A'}/5 • 
                             ${game.platforms?.slice(0, 2).map(p => p.platform.name).join(', ') || 'Multi'}
                         </div>
@@ -463,20 +590,74 @@
             resultsDiv.innerHTML = html;
         }
 
-        function selectGame(gameName, gameId) {
-            // Fermer les résultats
+        async function selectGame(game) {
+            currentGame = game;
             document.getElementById('search-results').classList.remove('show');
-            document.getElementById('search-input').value = gameName;
             
-            // Rediriger vers la page de comparaison (à implémenter)
-            alert(`🎮 Recherche de prix pour: ${gameName}\n\n🔧 Fonctionnalité en développement\nBientôt disponible: comparaison automatique sur Steam, Epic, GOG, etc.`);
+            // Afficher le modal
+            document.getElementById('modal-header').style.backgroundImage = `url('${game.background_image || ''}')`;
+            document.getElementById('modal-title').textContent = game.name;
+            document.getElementById('modal-meta').innerHTML = `
+                <span>📅 ${game.released || 'Date inconnue'}</span>
+                <span>⭐ ${game.rating || 'N/A'}/5</span>
+                <span>🎮 ${game.playtime || '0'}h de jeu</span>
+            `;
+            
+            // Récupérer plus de détails
+            try {
+                const response = await fetch(`https://api.rawg.io/api/games/${game.id}?key=${RAWG_API_KEY}`);
+                const details = await response.json();
+                
+                document.getElementById('modal-description').innerHTML = 
+                    details.description_raw?.substring(0, 400) + '...' || 'Aucune description disponible.';
+                
+                // Liste des stores
+                const stores = details.stores || [];
+                const storesHtml = stores.length > 0 ? stores.map(s => `
+                    <div class="store-item">
+                        <span class="store-name">${s.store.name}</span>
+                        <a href="${s.url || '#'}" target="_blank" class="store-btn">Voir l'offre →</a>
+                    </div>
+                `).join('') : `
+                    <div class="store-item">
+                        <span class="store-name">🔍 Recherche des meilleurs prix en cours...</span>
+                    </div>
+                    <div class="store-item">
+                        <span class="store-name">Steam</span>
+                        <a href="https://store.steampowered.com/search/?term=${encodeURIComponent(game.name)}" target="_blank" class="store-btn">Voir sur Steam →</a>
+                    </div>
+                    <div class="store-item">
+                        <span class="store-name">Epic Games</span>
+                        <a href="https://store.epicgames.com/en-US/browse?q=${encodeURIComponent(game.name)}" target="_blank" class="store-btn">Voir sur Epic →</a>
+                    </div>
+                    <div class="store-item">
+                        <span class="store-name">GOG</span>
+                        <a href="https://www.gog.com/games?query=${encodeURIComponent(game.name)}" target="_blank" class="store-btn">Voir sur GOG →</a>
+                    </div>
+                `;
+                
+                document.getElementById('stores-list').innerHTML = storesHtml;
+                
+            } catch (error) {
+                console.error('Erreur détails:', error);
+                document.getElementById('modal-description').textContent = 'Impossible de charger les détails.';
+            }
+            
+            document.getElementById('game-modal').classList.add('show');
         }
 
-        function escapeHtml(text) {
-            return text.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        function closeModal() {
+            document.getElementById('game-modal').classList.remove('show');
         }
 
-        // Fermer les résultats si on clique ailleurs
+        // Fermer modal en cliquant en dehors
+        document.getElementById('game-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'game-modal') {
+                closeModal();
+            }
+        });
+
+        // Fermer résultats si on clique ailleurs
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.search')) {
                 document.getElementById('search-results').classList.remove('show');
@@ -489,9 +670,6 @@
                 searchGames();
             }
         });
-
-        // Précharger les jeux populaires
-        preloadGames();
     </script>
 </body>
 </html>
