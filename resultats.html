@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Résultats - GigaPrice V0.4</title>
+    <title>Résultats - GigaPrice V0.5</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -130,6 +130,12 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             overflow: hidden;
             transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .result-card.has-promo {
+            border-color: rgba(255, 0, 60, 0.5);
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.2);
         }
 
         .result-card:hover {
@@ -144,6 +150,24 @@
             background-size: cover;
             background-position: center;
             position: relative;
+        }
+
+        .promo-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #ff003c, #c0003a);
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.9em;
+            animation: pulse 2s infinite;
+            box-shadow: 0 4px 15px rgba(255, 0, 60, 0.5);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .result-platforms {
@@ -181,7 +205,7 @@
 
         .result-rating {
             position: absolute;
-            top: 12px;
+            bottom: 12px;
             right: 12px;
             padding: 6px 12px;
             background: rgba(0, 0, 0, 0.7);
@@ -244,16 +268,125 @@
             gap: 10px;
         }
 
-        .price-old {
-            color: rgba(255, 255, 255, 0.4);
-            text-decoration: line-through;
+        .price-promo {
+            color: #ff003c;
+            font-weight: 800;
+            font-size: 1.2em;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            overflow-y: auto;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: rgba(20, 20, 30, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 0, 60, 0.5);
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .modal-title {
+            font-size: 2em;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .modal-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .modal-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(138, 16, 219, 0.2);
+            border-radius: 8px;
             font-size: 0.9em;
         }
 
-        .price-current {
-            font-size: 1.3em;
-            font-weight: 800;
-            color: #8a10db;
+        .modal-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .modal-stores {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .modal-store-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s;
+        }
+
+        .modal-store-item:hover {
+            background: rgba(138, 16, 219, 0.2);
         }
 
         .loading {
@@ -326,10 +459,26 @@
         </div>
     </div>
 
+    <!-- MODAL -->
+    <div class="modal" id="game-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div class="modal-image" id="modal-image"></div>
+            <div class="modal-body">
+                <h2 class="modal-title" id="modal-title"></h2>
+                <div class="modal-meta" id="modal-meta"></div>
+                <p class="modal-description" id="modal-description"></p>
+                <h3 style="margin-bottom: 15px; color: #fff;">Acheter ce jeu</h3>
+                <div class="modal-stores" id="modal-stores"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
         const RAWG_API_KEY = 'ed6c45e2264a4c6aac17c4f3525362d9';
         let allResults = [];
         let currentFilter = 'all';
+        let promoGames = [];
 
         const urlParams = new URLSearchParams(window.location.search);
         const query = urlParams.get('q');
@@ -338,13 +487,38 @@
             window.location.href = 'index.html';
         } else {
             document.getElementById('query').textContent = query;
-            searchGames(query);
+            loadPromos().then(() => searchGames(query));
+        }
+
+        // Charger les promos du site
+        async function loadPromos() {
+            try {
+                const [pc, ps5, xbox, sw] = await Promise.all([
+                    fetch('https://raw.githubusercontent.com/MKR-2TL/GigaPrice/main/data/promo_pc.json').then(r => r.json()),
+                    fetch('https://raw.githubusercontent.com/MKR-2TL/GigaPrice/main/data/promo_ps5.json').then(r => r.json()),
+                    fetch('https://raw.githubusercontent.com/MKR-2TL/GigaPrice/main/data/promo_xbox.json').then(r => r.json()),
+                    fetch('https://raw.githubusercontent.com/MKR-2TL/GigaPrice/main/data/promo_switch.json').then(r => r.json())
+                ]);
+                
+                promoGames = [...pc, ...ps5, ...xbox, ...sw];
+                console.log(`✅ ${promoGames.length} promos chargées`);
+            } catch (error) {
+                console.error('Erreur chargement promos:', error);
+            }
+        }
+
+        function isInPromo(gameName) {
+            const normalized = gameName.toLowerCase().trim();
+            return promoGames.find(p => p.titre.toLowerCase().trim().includes(normalized) || normalized.includes(p.titre.toLowerCase().trim()));
         }
 
         async function searchGames(query) {
             try {
+                // Tri: PC > Console > Mobile
+                const platforms = ['4', '187', '1', '18', '186', '7']; // PC, PS5, Xbox, PS4, Xbox One, Switch
+                
                 const rawgResponse = await fetch(
-                    `https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(query)}&page_size=20&ordering=-metacritic,-added`
+                    `https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(query)}&page_size=20&ordering=-metacritic,-added&platforms=${platforms.join(',')}`
                 );
                 const rawgData = await rawgResponse.json();
 
@@ -400,7 +574,6 @@
                             });
                         });
 
-                        // Si aucun store, ajouter des liens génériques
                         if (storeLinks.length === 0) {
                             const searchTerm = encodeURIComponent(game.name);
                             storeLinks.push(
@@ -409,6 +582,8 @@
                             );
                         }
 
+                        const promo = isInPromo(game.name);
+
                         return {
                             id: game.id,
                             name: game.name,
@@ -416,7 +591,9 @@
                             rating: game.rating || 'N/A',
                             released: game.released || 'N/A',
                             platforms: [...new Set(platforms)],
-                            stores: storeLinks
+                            stores: storeLinks,
+                            description: details.description_raw || 'Aucune description disponible.',
+                            promo: promo
                         };
                     })
                 );
@@ -450,8 +627,9 @@
             const html = `
                 <div class="results-grid">
                     ${results.map(game => `
-                        <div class="result-card" data-platforms="${game.platforms.join(',')}">
+                        <div class="result-card ${game.promo ? 'has-promo' : ''}" data-platforms="${game.platforms.join(',')}" data-game-id="${game.id}" onclick="showModal(${game.id})">
                             <div class="result-image" style="background-image: url('${game.image}')">
+                                ${game.promo ? `<div class="promo-badge">🔥 EN PROMO -${game.promo.reduction}%</div>` : ''}
                                 <div class="result-platforms">
                                     ${game.platforms.map(p => `
                                         <span class="platform-badge ${p}">${getPlatformIcon(p)}</span>
@@ -465,15 +643,18 @@
                                     <span>📅 ${game.released}</span>
                                     <span>🎮 ${game.platforms.length} plateforme(s)</span>
                                 </div>
-                                <div class="result-stores">
-                                    ${game.stores.slice(0, 4).map(store => `
-                                        <a href="${store.url}" target="_blank" rel="noopener noreferrer" class="store-item">
-                                            <span class="store-name">${store.name}</span>
-                                            <div class="store-price">
-                                                <span class="price-current">Voir l'offre →</span>
-                                            </div>
-                                        </a>
-                                    `).join('')}
+                                ${game.promo ? `
+                                    <div style="padding: 12px; background: rgba(255, 0, 60, 0.1); border-radius: 8px; margin-bottom: 10px;">
+                                        <div style="font-weight: 700; color: #ff003c; margin-bottom: 5px;">💰 Prix Promo</div>
+                                        <div style="display: flex; gap: 10px; align-items: baseline;">
+                                            <span style="text-decoration: line-through; color: rgba(255,255,255,0.4);">${game.promo.ancien_prix}€</span>
+                                            <span style="font-size: 1.5em; font-weight: 800; color: #ff003c;">${game.promo.nouveau_prix}€</span>
+                                        </div>
+                                        <div style="font-size: 0.8em; color: rgba(255,255,255,0.6); margin-top: 5px;">Sur ${game.promo.store}</div>
+                                    </div>
+                                ` : ''}
+                                <div style="padding: 10px; background: rgba(138, 16, 219, 0.1); border-radius: 8px; text-align: center; color: rgba(255,255,255,0.8); font-size: 0.9em;">
+                                    Cliquez pour plus d'infos et voir tous les stores
                                 </div>
                             </div>
                         </div>
@@ -483,6 +664,49 @@
 
             container.innerHTML = html;
         }
+
+        function showModal(gameId) {
+            const game = allResults.find(g => g.id === gameId);
+            if (!game) return;
+
+            document.getElementById('modal-image').style.backgroundImage = `url('${game.image}')`;
+            document.getElementById('modal-title').textContent = game.name;
+            
+            const metaHtml = `
+                ${game.rating !== 'N/A' ? `<div class="modal-meta-item">⭐ ${game.rating}/5</div>` : ''}
+                <div class="modal-meta-item">📅 ${game.released}</div>
+                <div class="modal-meta-item">🎮 ${game.platforms.length} plateformes</div>
+                ${game.promo ? `<div class="modal-meta-item" style="background: rgba(255, 0, 60, 0.3);">🔥 EN PROMO -${game.promo.reduction}%</div>` : ''}
+            `;
+            document.getElementById('modal-meta').innerHTML = metaHtml;
+            
+            document.getElementById('modal-description').textContent = game.description.slice(0, 300) + '...';
+            
+            const storesHtml = game.stores.map(store => `
+                <a href="${store.url}" target="_blank" rel="noopener noreferrer" class="modal-store-item">
+                    <span style="font-weight: 600;">${store.name}</span>
+                    ${game.promo && store.name === game.promo.store ? `
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="text-decoration: line-through; color: rgba(255,255,255,0.4);">${game.promo.ancien_prix}€</span>
+                            <span style="font-size: 1.3em; font-weight: 800; color: #ff003c;">${game.promo.nouveau_prix}€</span>
+                        </div>
+                    ` : `<span>Voir l'offre →</span>`}
+                </a>
+            `).join('');
+            document.getElementById('modal-stores').innerHTML = storesHtml;
+            
+            document.getElementById('game-modal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('game-modal').classList.remove('show');
+        }
+
+        document.getElementById('game-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'game-modal') {
+                closeModal();
+            }
+        });
 
         function getPlatformIcon(platform) {
             const icons = {
