@@ -25,18 +25,18 @@ export default async function handler(req, res) {
 
     const byPlatform = {
       pc: promos.filter(p => p. plateforme === 'pc'),
-      ps5: promos.filter(p => p.plateforme === 'ps5'),
+      ps5: promos. filter(p => p.plateforme === 'ps5'),
       xbox: promos.filter(p => p.plateforme === 'xbox'),
       switch: promos.filter(p => p.plateforme === 'switch')
     };
 
-    const dataDir = path.join(process.cwd(), 'public', 'data');
+    const dataDir = path.join(process. cwd(), 'data');
     await fs.mkdir(dataDir, { recursive: true });
 
     const files = {
       'promo_pc.json': byPlatform.pc,
-      'promo_ps5.json': byPlatform.ps5,
-      'promo_xbox.json': byPlatform. xbox,
+      'promo_ps5.json': byPlatform. ps5,
+      'promo_xbox.json': byPlatform.xbox,
       'promo_switch.json': byPlatform.switch
     };
 
@@ -49,7 +49,7 @@ export default async function handler(req, res) {
     const pendingPath = path.join(dataDir, 'pending.json');
     await fs.writeFile(pendingPath, JSON.stringify([], null, 2));
 
-    return res.status(200). json({
+    return res.status(200).json({
       success: true,
       message: `${promos.length} promos publiées`,
       details: {
@@ -62,6 +62,6 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('❌ Erreur:', error.message);
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error. message });
   }
 }
