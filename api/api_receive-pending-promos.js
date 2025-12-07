@@ -3,7 +3,7 @@ import path from 'path';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res. setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Content-Type', 'application/json');
 
   if (req.method === 'OPTIONS') {
@@ -17,13 +17,13 @@ export default async function handler(req, res) {
   try {
     const { promos } = req.body;
     
-    if (! Array.isArray(promos)) {
+    if (!Array.isArray(promos)) {
       return res.status(400).json({ error: 'Invalid data' });
     }
 
     console.log(`📥 Reçu ${promos.length} promos du bot`);
 
-    const dataDir = path.join('/tmp', 'data');
+    const dataDir = path.join(process.cwd(), 'data');
     await fs.mkdir(dataDir, { recursive: true });
     
     const filePath = path.join(dataDir, 'pending. json');
