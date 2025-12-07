@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Résultats - GigaPrice</title>
+    <title>Résultats - GigaPrice V0.4</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -70,7 +70,7 @@
         }
 
         .back-btn:hover {
-            color: #fff;
+            color: #8a10db;
         }
 
         .search-info {
@@ -130,7 +130,6 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             overflow: hidden;
             transition: all 0.3s;
-            cursor: pointer;
         }
 
         .result-card:hover {
@@ -153,6 +152,7 @@
             left: 12px;
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         .platform-badge {
@@ -224,6 +224,9 @@
             background: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
             transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
         }
 
         .store-item:hover {
@@ -328,9 +331,6 @@
         let allResults = [];
         let currentFilter = 'all';
 
-        // ============================================
-        // RÉCUPÉRER LE TERME DE RECHERCHE
-        // ============================================
         const urlParams = new URLSearchParams(window.location.search);
         const query = urlParams.get('q');
 
@@ -341,12 +341,8 @@
             searchGames(query);
         }
 
-        // ============================================
-        // RECHERCHE MULTI-SOURCES
-        // ============================================
         async function searchGames(query) {
             try {
-                // Rechercher sur RAWG (trié par popularité + note)
                 const rawgResponse = await fetch(
                     `https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(query)}&page_size=20&ordering=-metacritic,-added`
                 );
@@ -357,13 +353,11 @@
                     return;
                 }
 
-                // Pour chaque jeu, récupérer les stores et prix
                 allResults = await Promise.all(
                     rawgData.results.map(async (game) => {
                         const detailsResponse = await fetch(`https://api.rawg.io/api/games/${game.id}?key=${RAWG_API_KEY}`);
                         const details = await detailsResponse.json();
 
-                        // Déterminer les plateformes
                         const platforms = [];
                         if (game.platforms) {
                             game.platforms.forEach(p => {
@@ -375,27 +369,28 @@
                             });
                         }
 
-                        // Stores disponibles avec vrais liens
                         const stores = details.stores || [];
                         const storeLinks = [];
                         
                         stores.forEach(s => {
                             const storeName = s.store.name;
-                            let url = s.url || '#';
+                            let url = '#';
+                            let searchTerm = encodeURIComponent(game.name);
                             
-                            // Générer les vrais liens selon le store
                             if (storeName.toLowerCase().includes('steam')) {
-                                url = `https://store.steampowered.com/search/?term=${encodeURIComponent(game.name)}`;
+                                url = `https://store.steampowered.com/search/?term=${searchTerm}`;
                             } else if (storeName.toLowerCase().includes('epic')) {
-                                url = `https://store.epicgames.com/en-US/browse?q=${encodeURIComponent(game.name)}`;
+                                url = `https://store.epicgames.com/en-US/browse?q=${searchTerm}`;
                             } else if (storeName.toLowerCase().includes('gog')) {
-                                url = `https://www.gog.com/games?query=${encodeURIComponent(game.name)}`;
+                                url = `https://www.gog.com/games?query=${searchTerm}`;
                             } else if (storeName.toLowerCase().includes('playstation')) {
-                                url = `https://store.playstation.com/search/${encodeURIComponent(game.name)}`;
+                                url = `https://store.playstation.com/en-us/search/${searchTerm}`;
                             } else if (storeName.toLowerCase().includes('xbox')) {
-                                url = `https://www.xbox.com/search?q=${encodeURIComponent(game.name)}`;
+                                url = `https://www.xbox.com/en-us/search?q=${searchTerm}`;
                             } else if (storeName.toLowerCase().includes('nintendo')) {
-                                url = `https://www.nintendo.com/search/#q=${encodeURIComponent(game.name)}`;
+                                url = `https://www.nintendo.com/search/#q=${searchTerm}`;
+                            } else {
+                                url = s.url || `https://www.google.com/search?q=${searchTerm}+buy`;
                             }
                             
                             storeLinks.push({
@@ -404,6 +399,15 @@
                                 platform: getPlatformFromStore(storeName)
                             });
                         });
+
+                        // Si aucun store, ajouter des liens génériques
+                        if (storeLinks.length === 0) {
+                            const searchTerm = encodeURIComponent(game.name);
+                            storeLinks.push(
+                                { name: 'Steam', url: `https://store.steampowered.com/search/?term=${searchTerm}`, platform: 'pc' },
+                                { name: 'Epic Games', url: `https://store.epicgames.com/en-US/browse?q=${searchTerm}`, platform: 'pc' }
+                            );
+                        }
 
                         return {
                             id: game.id,
@@ -433,9 +437,6 @@
             return 'pc';
         }
 
-        // ============================================
-        // AFFICHAGE DES RÉSULTATS
-        // ============================================
         function displayResults(results) {
             const container = document.getElementById('results-container');
             
@@ -449,7 +450,7 @@
             const html = `
                 <div class="results-grid">
                     ${results.map(game => `
-                        <div class="result-card" data-platforms="${game.platforms.join(',')}" onclick="window.location.href='comparateur.html?game=${game.id}'">
+                        <div class="result-card" data-platforms="${game.platforms.join(',')}">
                             <div class="result-image" style="background-image: url('${game.image}')">
                                 <div class="result-platforms">
                                     ${game.platforms.map(p => `
@@ -465,14 +466,14 @@
                                     <span>🎮 ${game.platforms.length} plateforme(s)</span>
                                 </div>
                                 <div class="result-stores">
-                                    ${game.stores.slice(0, 3).map(store => `
-                                        <div class="store-item" onclick="event.stopPropagation(); window.open('${store.url}', '_blank')">
+                                    ${game.stores.slice(0, 4).map(store => `
+                                        <a href="${store.url}" target="_blank" rel="noopener noreferrer" class="store-item">
                                             <span class="store-name">${store.name}</span>
                                             <div class="store-price">
-                                                <span class="price-current">Voir →</span>
+                                                <span class="price-current">Voir l'offre →</span>
                                             </div>
-                                        </div>
-                                    `).join('') || '<div class="store-item"><span class="store-name">Recherche des prix en cours...</span></div>'}
+                                        </a>
+                                    `).join('')}
                                 </div>
                             </div>
                         </div>
@@ -493,17 +494,12 @@
             return icons[platform] || '🎮';
         }
 
-        // ============================================
-        // FILTRAGE PAR PLATEFORME
-        // ============================================
         function filterPlatform(platform) {
             currentFilter = platform;
             
-            // Update active button
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
 
-            // Filter results
             const cards = document.querySelectorAll('.result-card');
             let visibleCount = 0;
 
