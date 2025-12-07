@@ -165,7 +165,7 @@
             font-family: 'Inter', sans-serif;
         }
 
-        .platform-filter-btn. active {
+        .platform-filter-btn.active {
             background: rgba(255, 0, 60, 0.2);
             border-color: rgba(255, 0, 60, 0.5);
             color: #fff;
@@ -173,11 +173,11 @@
 
         .promos-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 24px;
         }
 
-        . promo-card {
+        .promo-card {
             background: rgba(255, 0, 60, 0.05);
             border: 1px solid rgba(255, 0, 60, 0.2);
             border-radius: 16px;
@@ -185,14 +185,14 @@
             transition: all 0.3s;
         }
 
-        .promo-card. approved {
+        .promo-card.approved {
             border-color: #10b981;
             box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
         }
 
         .promo-image {
             width: 100%;
-            height: 200px;
+            height: 180px;
             background-size: cover;
             background-position: center;
             position: relative;
@@ -229,11 +229,14 @@
             padding: 20px;
         }
 
-        . promo-title {
-            font-size: 1.3em;
+        .promo-title {
+            font-size: 1.2em;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .promo-store {
@@ -241,7 +244,7 @@
             padding: 4px 12px;
             background: rgba(255, 0, 60, 0.2);
             border-radius: 12px;
-            font-size: 0.85em;
+            font-size: 0.8em;
             margin-bottom: 12px;
             color: #ff003c;
             font-weight: 600;
@@ -251,34 +254,35 @@
             display: flex;
             align-items: baseline;
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .price-old {
-            font-size: 1.1em;
+            font-size: 0.95em;
             color: rgba(255, 255, 255, 0.4);
             text-decoration: line-through;
         }
 
         .price-current {
-            font-size: 1.8em;
+            font-size: 1.5em;
             font-weight: 800;
             color: #ff003c;
         }
 
-        . promo-actions {
+        .promo-actions {
             display: flex;
             gap: 10px;
         }
 
         .btn {
             flex: 1;
-            padding: 12px;
+            padding: 10px;
             border: none;
             border-radius: 8px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: 0.85em;
         }
 
         .btn-approve {
@@ -286,10 +290,18 @@
             color: white;
         }
 
+        .btn-approve:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+        }
+
         .btn-reject {
             background: rgba(239, 68, 68, 0.2);
             border: 1px solid rgba(239, 68, 68, 0.3);
             color: #ef4444;
+        }
+
+        .btn-reject:hover {
+            background: rgba(239, 68, 68, 0. 3);
         }
 
         .loading {
@@ -323,10 +335,26 @@
             padding: 40px;
         }
 
-        . error-page h1 {
+        .error-page h1 {
             font-size: 4em;
             margin-bottom: 20px;
             color: #ff003c;
+        }
+
+        .refresh-btn {
+            padding: 10px 20px;
+            background: rgba(138, 16, 219, 0.2);
+            border: 1px solid rgba(138, 16, 219, 0. 5);
+            border-radius: 8px;
+            color: #8a10db;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0. 3s;
+            margin-top: 20px;
+        }
+
+        refresh-btn:hover {
+            background: rgba(138, 16, 219, 0.3);
         }
     </style>
 </head>
@@ -341,6 +369,7 @@
     <script>
         const userData = localStorage.getItem('discord_user');
         let approvedPromos = [];
+        let allPromos = [];
         let currentPlatformFilter = 'all';
         
         if (! userData) {
@@ -395,21 +424,24 @@
                         <div class="stat-value" id="approved-count">0</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">🌐 Publiées sur le site</div>
+                        <div class="stat-label">🌐 Publiées</div>
                         <div class="stat-value" id="published-count">0</div>
                     </div>
                 </div>
 
                 <div class="content">
                     <div class="section-header">
-                        <h2 class="section-title">📋 Promos des salons Discord</h2>
-                        <button class="publish-btn" onclick="publishToSite()" id="publish-btn" disabled>
-                            🌐 Publier sur le SITE (<span id="publish-count">0</span>)
-                        </button>
+                        <h2 class="section-title">📋 Promotions Discord</h2>
+                        <div>
+                            <button class="publish-btn" onclick="publishToSite()" id="publish-btn" disabled>
+                                🌐 Publier (<span id="publish-count">0</span>)
+                            </button>
+                            <button class="refresh-btn" onclick="loadPromos()">🔄 Rafraîchir</button>
+                        </div>
                     </div>
 
                     <div class="platform-filters">
-                        <button class="platform-filter-btn active" data-platform="all" onclick="filterByPlatform('all')">📊 Tout</button>
+                        <button class="platform-filter-btn active" data-platform="all" onclick="filterByPlatform('all')">📊 Tous</button>
                         <button class="platform-filter-btn" data-platform="pc" onclick="filterByPlatform('pc')">💻 PC</button>
                         <button class="platform-filter-btn" data-platform="ps5" onclick="filterByPlatform('ps5')">🎮 PS5</button>
                         <button class="platform-filter-btn" data-platform="xbox" onclick="filterByPlatform('xbox')">🟢 Xbox</button>
@@ -426,13 +458,12 @@
             `;
 
             loadPromos();
-            setInterval(loadPromos, 60000);
+            setInterval(loadPromos, 30000);
         }
 
-        // 🔧 NOUVELLE FONCTION : Charger depuis l'API
         async function loadPromos() {
             try {
-                console.log('📥 Chargement des promotions depuis API.. .');
+                console.log('📥 Chargement des promos.. .');
                 
                 const response = await fetch('/api/get-pending-promos');
                 
@@ -440,21 +471,22 @@
                     throw new Error(`API error: ${response.status}`);
                 }
                 
-                const pendingPromos = await response.json();
+                allPromos = await response.json();
 
-                console.log(`✅ ${pendingPromos.length} promos chargées`);
-                document.getElementById('pending-count').textContent = pendingPromos.length;
+                console.log(`✅ ${allPromos.length} promos chargées`);
+                document.getElementById('pending-count').textContent = allPromos.length;
                 document.getElementById('approved-count').textContent = approvedPromos.length;
 
-                displayPromos(pendingPromos);
+                displayPromos(allPromos);
                 updatePublishButton();
 
             } catch (error) {
-                console.error('❌ Erreur chargement:', error);
+                console.error('❌ Erreur:', error);
                 document.getElementById('promos-container').innerHTML = `
                     <div class="loading">
-                        <h2>⚠️ Impossible de charger les promos</h2>
-                        <p>Lance <code>! update</code> sur Discord pour générer des promos</p>
+                        <h2>⚠️ Impossible de charger</h2>
+                        <p>Tape <code>! update</code> sur Discord pour générer des promos</p>
+                        <button class="refresh-btn" onclick="loadPromos()">🔄 Réessayer</button>
                     </div>
                 `;
             }
@@ -472,14 +504,11 @@
             });
 
             const cards = document.querySelectorAll('. promo-card');
-            let visibleCount = 0;
-
             cards. forEach(card => {
                 const cardPlatform = card.dataset.platform;
                 
                 if (platform === 'all' || cardPlatform === platform) {
                     card.style.display = 'block';
-                    visibleCount++;
                 } else {
                     card.style.display = 'none';
                 }
@@ -487,10 +516,15 @@
         }
 
         function displayPromos(promos) {
-            const container = document.getElementById('promos-container');
+            const container = document. getElementById('promos-container');
 
             if (promos.length === 0) {
-                container. innerHTML = '<div class="loading"><p>Aucune promo en attente</p></div>';
+                container.innerHTML = `
+                    <div class="loading">
+                        <h2>📭 Aucune promo en attente</h2>
+                        <p>Tape <code>!update</code> sur Discord</p>
+                    </div>
+                `;
                 return;
             }
 
@@ -508,7 +542,7 @@
                             <span class="price-current">${promo.nouveau_prix}€</span>
                         </div>
                         <div class="promo-actions">
-                            <button class="btn btn-approve" onclick="approvePromo('${promo.id}')">✅ Publier sur le site</button>
+                            <button class="btn btn-approve" onclick="approvePromo('${promo.id}')">✅ Valider</button>
                             <button class="btn btn-reject" onclick="rejectPromo('${promo.id}')">❌ Ignorer</button>
                         </div>
                     </div>
@@ -532,17 +566,27 @@
             const card = document.querySelector(`[data-id="${id}"]`);
             const promoData = JSON.parse(card.dataset.promo);
             
-            approvedPromos.push(promoData);
-            card.classList.add('approved');
-            card.querySelector('.btn-approve').textContent = '✅ Validé';
-            card.querySelector('. btn-approve').disabled = true;
+            if (approvedPromos.some(p => p.id === id)) {
+                card.classList.remove('approved');
+                approvedPromos = approvedPromos.filter(p => p.id !== id);
+                card.querySelector('.btn-approve').textContent = '✅ Valider';
+                card.querySelector('.btn-approve').disabled = false;
+            } else {
+                approvedPromos.push(promoData);
+                card.classList. add('approved');
+                card. querySelector('.btn-approve').textContent = '✅ Validé';
+                card.querySelector('. btn-approve').disabled = true;
+            }
             
             document.getElementById('approved-count').textContent = approvedPromos.length;
             updatePublishButton();
         }
 
         function rejectPromo(id) {
-            document.querySelector(`[data-id="${id}"]`).remove();
+            document.querySelector(`[data-id="${id}"]`).style.display = 'none';
+            approvedPromos = approvedPromos.filter(p => p.id !== id);
+            document.getElementById('approved-count').textContent = approvedPromos.length;
+            updatePublishButton();
         }
 
         function updatePublishButton() {
@@ -551,7 +595,7 @@
             
             count.textContent = approvedPromos.length;
             
-            if (approvedPromos.length > 0) {
+            if (approvedPromos. length > 0) {
                 btn. disabled = false;
                 btn. style.opacity = '1';
             } else {
@@ -560,19 +604,18 @@
             }
         }
 
-        // 🔧 NOUVELLE FONCTION : Publier vers l'API
         async function publishToSite() {
             if (approvedPromos.length === 0) {
                 alert('❌ Aucune promo validée');
                 return;
             }
 
-            if (! confirm(`Publier ${approvedPromos.length} promotions sur le SITE ?`)) {
+            if (! confirm(`Publier ${approvedPromos.length} promotions sur promo. html ?`)) {
                 return;
             }
 
             try {
-                console.log('📤 Envoi vers API...');
+                console.log('📤 Publication...');
                 
                 const response = await fetch('/api/publish-promos', {
                     method: 'POST',
@@ -583,12 +626,7 @@
                 const result = await response.json();
 
                 if (response.ok && result.success) {
-                    alert(`✅ ${approvedPromos.length} promotions publiées !\n\n` +
-                        `💻 PC: ${result.details.pc}\n` +
-                        `🎮 PS5: ${result.details.ps5}\n` +
-                        `🟢 Xbox: ${result.details.xbox}\n` +
-                        `🔴 Switch: ${result.details.switch}\n\n` +
-                        `Les utilisateurs peuvent les voir sur promo.html`);
+                    alert(`✅ PUBLIÉ!\n\n💻 PC: ${result.details.pc}\n🎮 PS5: ${result.details. ps5}\n🟢 Xbox: ${result.details.xbox}\n🔴 Switch: ${result.details.switch}\n\nLes jeux sont maintenant visibles sur promo.html`);
                     
                     document.getElementById('published-count').textContent = 
                         parseInt(document.getElementById('published-count').textContent) + approvedPromos.length;
@@ -600,8 +638,8 @@
                     alert(`❌ Erreur: ${result.error || 'Erreur inconnue'}`);
                 }
             } catch (error) {
-                console.error('❌ Erreur publication:', error);
-                alert(`❌ Erreur de connexion: ${error.message}`);
+                console.error('❌ Erreur:', error);
+                alert(`❌ Erreur: ${error.message}`);
             }
         }
 
