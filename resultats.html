@@ -346,9 +346,9 @@
         // ============================================
         async function searchGames(query) {
             try {
-                // Rechercher sur RAWG
+                // Rechercher sur RAWG (trié par popularité + note)
                 const rawgResponse = await fetch(
-                    `https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(query)}&page_size=20&ordering=-rating,-added`
+                    `https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(query)}&page_size=20&ordering=-metacritic,-added`
                 );
                 const rawgData = await rawgResponse.json();
 
@@ -375,13 +375,35 @@
                             });
                         }
 
-                        // Stores disponibles
+                        // Stores disponibles avec vrais liens
                         const stores = details.stores || [];
-                        const storeLinks = stores.map(s => ({
-                            name: s.store.name,
-                            url: s.url,
-                            platform: getPlatformFromStore(s.store.name)
-                        }));
+                        const storeLinks = [];
+                        
+                        stores.forEach(s => {
+                            const storeName = s.store.name;
+                            let url = s.url || '#';
+                            
+                            // Générer les vrais liens selon le store
+                            if (storeName.toLowerCase().includes('steam')) {
+                                url = `https://store.steampowered.com/search/?term=${encodeURIComponent(game.name)}`;
+                            } else if (storeName.toLowerCase().includes('epic')) {
+                                url = `https://store.epicgames.com/en-US/browse?q=${encodeURIComponent(game.name)}`;
+                            } else if (storeName.toLowerCase().includes('gog')) {
+                                url = `https://www.gog.com/games?query=${encodeURIComponent(game.name)}`;
+                            } else if (storeName.toLowerCase().includes('playstation')) {
+                                url = `https://store.playstation.com/search/${encodeURIComponent(game.name)}`;
+                            } else if (storeName.toLowerCase().includes('xbox')) {
+                                url = `https://www.xbox.com/search?q=${encodeURIComponent(game.name)}`;
+                            } else if (storeName.toLowerCase().includes('nintendo')) {
+                                url = `https://www.nintendo.com/search/#q=${encodeURIComponent(game.name)}`;
+                            }
+                            
+                            storeLinks.push({
+                                name: storeName,
+                                url: url,
+                                platform: getPlatformFromStore(storeName)
+                            });
+                        });
 
                         return {
                             id: game.id,
