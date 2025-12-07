@@ -3,8 +3,8 @@ import path from 'path';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res. setHeader('Content-Type', 'application/json');
+  res. setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Content-Type', 'application/json');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
-      const filePath = path.join('/tmp', 'data', 'pending.json');
+      const filePath = path.join(process.cwd(), 'data', 'pending. json');
       
       try {
         const data = await fs.readFile(filePath, 'utf8');
