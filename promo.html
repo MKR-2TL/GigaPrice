@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GigaPrice - Promotions Gaming</title>
+    <title>GigaPrice V0.4 - Promotions Gaming</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -14,6 +14,15 @@
             background: #0a0a0f;
             min-height: 100vh;
         }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 0, 60, 0.15) 0%, transparent 50%);
+            z-index: -1;
+        }
         
         nav {
             display: flex;
@@ -22,7 +31,7 @@
             padding: 20px;
             background: rgba(10, 10, 15, 0.8);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 0, 60, 0.3);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -40,18 +49,76 @@
         
         nav a.active {
             color: #fff;
-            background: rgba(138, 16, 219, 0.2);
+            background: rgba(255, 0, 60, 0.2);
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.3);
+        }
+
+        nav a:hover {
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.2);
         }
         
         .header {
             text-align: center;
-            padding: 60px 20px 40px;
+            padding: 60px 20px 30px;
         }
         
         .header h1 {
             font-size: 3em;
             font-weight: 800;
             color: #fff;
+            text-shadow: 0 0 30px rgba(255, 0, 60, 0.5);
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 12px;
+        }
+
+        /* BARRE DE RECHERCHE */
+        .search-bar-container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .search-bar {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 0, 60, 0.3);
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.2);
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 14px 18px;
+            border: none;
+            background: transparent;
+            color: white;
+            font-size: 1em;
+            outline: none;
+        }
+
+        .search-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .search-bar button {
+            padding: 14px 24px;
+            border: none;
+            background: linear-gradient(135deg, #ff003c, #c0003a);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-bar button:hover {
+            background: linear-gradient(135deg, #ff1a50, #d0004a);
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.5);
         }
         
         .loading {
@@ -61,8 +128,8 @@
         }
         
         .spinner {
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            border-top: 3px solid #8a10db;
+            border: 3px solid rgba(255, 0, 60, 0.2);
+            border-top: 3px solid #ff003c;
             border-radius: 50%;
             width: 50px;
             height: 50px;
@@ -86,7 +153,7 @@
         .filter-btn {
             padding: 10px 24px;
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 0, 60, 0.2);
             border-radius: 8px;
             color: rgba(255, 255, 255, 0.7);
             font-weight: 600;
@@ -96,9 +163,15 @@
         }
         
         .filter-btn.active {
-            background: rgba(138, 16, 219, 0.2);
-            border-color: rgba(138, 16, 219, 0.3);
+            background: rgba(255, 0, 60, 0.2);
+            border-color: rgba(255, 0, 60, 0.5);
             color: #fff;
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.3);
+        }
+
+        .filter-btn:hover {
+            border-color: rgba(255, 0, 60, 0.4);
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.2);
         }
         
         .grid {
@@ -113,7 +186,7 @@
         .card {
             background: rgba(255, 255, 255, 0.03);
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 0, 60, 0.2);
             overflow: hidden;
             transition: all 0.3s;
             position: relative;
@@ -121,22 +194,23 @@
         
         .card:hover {
             transform: translateY(-8px);
-            border-color: rgba(138, 16, 219, 0.3);
+            border-color: rgba(255, 0, 60, 0.5);
+            box-shadow: 0 12px 40px rgba(255, 0, 60, 0.3);
         }
         
         .badge {
             position: absolute;
             top: 12px;
             right: 12px;
-            background: #8a10db;
+            background: #ff003c;
             padding: 6px 16px;
             border-radius: 20px;
             font-weight: 700;
             font-size: 0.9em;
             z-index: 10;
+            box-shadow: 0 4px 15px rgba(255, 0, 60, 0.5);
         }
         
-        /* BADGE PLATEFORME */
         .platform-badge {
             position: absolute;
             top: 12px;
@@ -150,8 +224,8 @@
         }
         
         .platform-badge.pc {
-            background: rgba(138, 16, 219, 0.9);
-            border: 1px solid rgba(138, 16, 219, 1);
+            background: rgba(255, 0, 60, 0.9);
+            border: 1px solid rgba(255, 0, 60, 1);
         }
         
         .platform-badge.ps5 {
@@ -190,10 +264,12 @@
         .store {
             display: inline-block;
             padding: 4px 12px;
-            background: rgba(138, 16, 219, 0.2);
+            background: rgba(255, 0, 60, 0.2);
             border-radius: 12px;
             font-size: 0.8em;
             margin-bottom: 12px;
+            color: #ff003c;
+            font-weight: 600;
         }
         
         .prices {
@@ -212,13 +288,13 @@
         .new-price {
             font-size: 1.8em;
             font-weight: 800;
-            color: #8a10db;
+            color: #ff003c;
         }
         
         .btn {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(135deg, #8a10db, #4338ca);
+            background: linear-gradient(135deg, #ff003c, #c0003a);
             border: none;
             border-radius: 8px;
             color: white;
@@ -227,6 +303,23 @@
             text-decoration: none;
             display: block;
             text-align: center;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #ff1a50, #d0004a);
+            box-shadow: 0 6px 20px rgba(255, 0, 60, 0.5);
+        }
+
+        .results-info {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 20px;
+            font-size: 0.95em;
+        }
+
+        .results-info strong {
+            color: #ff003c;
         }
 
         @media (max-width: 768px) {
@@ -245,7 +338,15 @@
 
     <div class="header">
         <h1>🔥 Promotions</h1>
-        <p style="color: rgba(255,255,255,0.6); margin-top: 12px;">Mises à jour quotidiennes</p>
+        <p>Mises à jour quotidiennes</p>
+    </div>
+
+    <!-- BARRE DE RECHERCHE -->
+    <div class="search-bar-container">
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Rechercher un jeu dans les promos...">
+            <button onclick="filterBySearch()">🔍 Rechercher</button>
+        </div>
     </div>
 
     <div class="filters">
@@ -256,6 +357,8 @@
         <button class="filter-btn" onclick="filterBy('switch')">🔴 Switch</button>
     </div>
 
+    <div class="results-info" id="results-info"></div>
+
     <div id="container">
         <div class="loading">
             <div class="spinner"></div>
@@ -265,15 +368,12 @@
 
     <script>
         let allPromos = [];
+        let currentFilter = 'all';
         
-        // ============================================
-        // CHARGE LES 4 FICHIERS JSON (UN PAR PLATEFORME)
-        // ============================================
         async function loadPromos() {
             try {
                 console.log('📥 Chargement des promotions...');
                 
-                // Charger les 4 fichiers JSON depuis GitHub
                 const [pc, ps5, xbox, sw] = await Promise.all([
                     fetch('https://raw.githubusercontent.com/MKR-2TL/GigaPrice/main/data/promo_pc.json').then(r => r.json()),
                     fetch('https://raw.githubusercontent.com/MKR-2TL/GigaPrice/main/data/promo_ps5.json').then(r => r.json()),
@@ -281,7 +381,6 @@
                     fetch('https://raw.githubusercontent.com/MKR-2TL/GigaPrice/main/data/promo_switch.json').then(r => r.json())
                 ]);
                 
-                // Ajouter la plateforme à chaque jeu
                 allPromos = [
                     ...pc.map(p => ({...p, platform: 'pc'})),
                     ...ps5.map(p => ({...p, platform: 'ps5'})),
@@ -290,9 +389,8 @@
                 ];
                 
                 console.log(`✅ ${allPromos.length} promos chargées`);
-                console.log(`   PC: ${pc.length}, PS5: ${ps5.length}, Xbox: ${xbox.length}, Switch: ${sw.length}`);
-                
                 displayPromos(allPromos);
+                updateResultsInfo(allPromos.length);
                 
             } catch (error) {
                 console.error('❌ Erreur chargement:', error);
@@ -314,12 +412,12 @@
             const container = document.getElementById('container');
             
             if (promos.length === 0) {
-                container.innerHTML = '<div class="loading"><p>🔍 Aucune promotion disponible</p></div>';
+                container.innerHTML = '<div class="loading"><p>🔍 Aucune promotion trouvée</p></div>';
                 return;
             }
             
             const html = `<div class="grid">${promos.map(p => `
-                <div class="card" data-platform="${p.platform}">
+                <div class="card" data-platform="${p.platform}" data-title="${p.titre.toLowerCase()}">
                     <div class="platform-badge ${p.platform}">${getPlatformName(p.platform)}</div>
                     <div class="badge">-${p.reduction}%</div>
                     <div class="image" style="background-image: url('${p.image}');"></div>
@@ -339,17 +437,56 @@
         }
         
         function filterBy(platform) {
-            // Changer le bouton actif
+            currentFilter = platform;
+            
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
             
-            // Filtrer les jeux
-            if (platform === 'all') {
-                displayPromos(allPromos);
+            const searchQuery = document.getElementById('search-input').value.trim().toLowerCase();
+            applyFilters(platform, searchQuery);
+        }
+
+        function filterBySearch() {
+            const searchQuery = document.getElementById('search-input').value.trim().toLowerCase();
+            applyFilters(currentFilter, searchQuery);
+        }
+
+        // Recherche en temps réel
+        document.getElementById('search-input')?.addEventListener('input', () => {
+            const searchQuery = document.getElementById('search-input').value.trim().toLowerCase();
+            applyFilters(currentFilter, searchQuery);
+        });
+
+        function applyFilters(platform, searchQuery) {
+            const cards = document.querySelectorAll('.card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const cardPlatform = card.dataset.platform;
+                const cardTitle = card.dataset.title;
+                
+                const matchesPlatform = platform === 'all' || cardPlatform === platform;
+                const matchesSearch = !searchQuery || cardTitle.includes(searchQuery);
+                
+                if (matchesPlatform && matchesSearch) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            updateResultsInfo(visibleCount);
+        }
+
+        function updateResultsInfo(count) {
+            const info = document.getElementById('results-info');
+            if (count === 0) {
+                info.innerHTML = '🔍 Aucune promotion trouvée avec ces filtres';
+            } else if (count === allPromos.length) {
+                info.innerHTML = `📊 <strong>${count}</strong> promotions disponibles`;
             } else {
-                const filtered = allPromos.filter(p => p.platform === platform);
-                console.log(`Filtré ${platform}: ${filtered.length} jeux`);
-                displayPromos(filtered);
+                info.innerHTML = `📊 <strong>${count}</strong> promotions trouvées`;
             }
         }
         
@@ -358,15 +495,11 @@
                 <div class="loading">
                     <p style="font-size: 1.5em; margin-bottom: 20px;">⚠️ Impossible de charger les promotions</p>
                     <p style="color: rgba(255,255,255,0.6);">Vérifie que les fichiers JSON sont bien sur GitHub</p>
-                    <p style="color: rgba(255,255,255,0.6); margin-top: 10px;">Dans le dossier: <code>data/</code></p>
                 </div>
             `;
         }
         
-        // Charger au démarrage
         loadPromos();
-        
-        // Recharger toutes les 5 minutes
         setInterval(loadPromos, 5 * 60 * 1000);
     </script>
 </body>
