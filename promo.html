@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GigaPrice V0.4 - Promotions Gaming</title>
+    <title>GigaPrice V0.5 - Promotions Gaming</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -67,12 +67,20 @@
             color: #fff;
         }
 
+        .version {
+            display: inline-block;
+            background: rgba(138, 16, 219, 0.3);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+
         .header p {
             color: rgba(255, 255, 255, 0.6);
             margin-top: 12px;
         }
 
-        /* BARRE DE RECHERCHE */
         .search-bar-container {
             max-width: 600px;
             margin: 30px auto;
@@ -176,7 +184,6 @@
             gap: 24px;
         }
         
-        /* ANIMATION FADE IN */
         .card {
             background: rgba(255, 255, 255, 0.03);
             border-radius: 12px;
@@ -349,7 +356,7 @@
     </nav>
 
     <div class="header">
-        <h1>🔥 Promotions</h1>
+        <h1>🔥 Promotions <span class="version">V0.5</span></h1>
         <p>Mises à jour quotidiennes</p>
     </div>
 
@@ -361,11 +368,11 @@
     </div>
 
     <div class="filters">
-        <button class="filter-btn active" onclick="filterBy('all')">Toutes</button>
-        <button class="filter-btn" onclick="filterBy('pc')">💻 PC</button>
-        <button class="filter-btn" onclick="filterBy('ps5')">🎮 PlayStation</button>
-        <button class="filter-btn" onclick="filterBy('xbox')">🟢 Xbox</button>
-        <button class="filter-btn" onclick="filterBy('switch')">🔴 Switch</button>
+        <button class="filter-btn active" data-platform="all" onclick="filterBy('all')">Toutes</button>
+        <button class="filter-btn" data-platform="pc" onclick="filterBy('pc')">💻 PC</button>
+        <button class="filter-btn" data-platform="ps5" onclick="filterBy('ps5')">🎮 PlayStation</button>
+        <button class="filter-btn" data-platform="xbox" onclick="filterBy('xbox')">🟢 Xbox</button>
+        <button class="filter-btn" data-platform="switch" onclick="filterBy('switch')">🔴 Switch</button>
     </div>
 
     <div class="results-info" id="results-info"></div>
@@ -451,25 +458,17 @@
         function filterBy(platform) {
             currentFilter = platform;
             
-            // Animation de changement
-            document.querySelectorAll('.card').forEach(card => {
-                card.style.animation = 'none';
+            // Mettre à jour les boutons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.dataset.platform === platform) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
             });
-
-            setTimeout(() => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                event.target.classList.add('active');
-                
-                const searchQuery = document.getElementById('search-input').value.trim().toLowerCase();
-                applyFilters(platform, searchQuery);
-
-                // Réanimer les cartes
-                document.querySelectorAll('.card').forEach((card, index) => {
-                    if (card.style.display !== 'none') {
-                        card.style.animation = `fadeInUp 0.5s ${(index % 6) * 0.05}s forwards`;
-                    }
-                });
-            }, 50);
+            
+            const searchQuery = document.getElementById('search-input').value.trim().toLowerCase();
+            applyFilters(platform, searchQuery);
         }
 
         function filterBySearch() {
