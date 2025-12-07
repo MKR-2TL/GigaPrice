@@ -20,7 +20,7 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: radial-gradient(circle at 20% 50%, rgba(255, 0, 60, 0.15) 0%, transparent 50%);
+            background: radial-gradient(circle at 20% 50%, rgba(138, 16, 219, 0.1) 0%, transparent 50%);
             z-index: -1;
         }
         
@@ -31,7 +31,7 @@
             padding: 20px;
             background: rgba(10, 10, 15, 0.8);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 0, 60, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -49,13 +49,11 @@
         
         nav a.active {
             color: #fff;
-            background: rgba(255, 0, 60, 0.2);
-            box-shadow: 0 0 20px rgba(255, 0, 60, 0.3);
+            background: rgba(138, 16, 219, 0.2);
         }
 
         nav a:hover {
             color: #fff;
-            box-shadow: 0 0 15px rgba(255, 0, 60, 0.2);
         }
         
         .header {
@@ -67,7 +65,6 @@
             font-size: 3em;
             font-weight: 800;
             color: #fff;
-            text-shadow: 0 0 30px rgba(255, 0, 60, 0.5);
         }
 
         .header p {
@@ -87,9 +84,8 @@
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
             border-radius: 12px;
-            border: 1px solid rgba(255, 0, 60, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(255, 0, 60, 0.2);
         }
 
         .search-bar input {
@@ -109,7 +105,7 @@
         .search-bar button {
             padding: 14px 24px;
             border: none;
-            background: linear-gradient(135deg, #ff003c, #c0003a);
+            background: linear-gradient(135deg, #8a10db, #4338ca);
             color: white;
             font-weight: 600;
             cursor: pointer;
@@ -117,8 +113,7 @@
         }
 
         .search-bar button:hover {
-            background: linear-gradient(135deg, #ff1a50, #d0004a);
-            box-shadow: 0 0 20px rgba(255, 0, 60, 0.5);
+            background: linear-gradient(135deg, #9d21f0, #5348e0);
         }
         
         .loading {
@@ -128,8 +123,8 @@
         }
         
         .spinner {
-            border: 3px solid rgba(255, 0, 60, 0.2);
-            border-top: 3px solid #ff003c;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #8a10db;
             border-radius: 50%;
             width: 50px;
             height: 50px;
@@ -153,7 +148,7 @@
         .filter-btn {
             padding: 10px 24px;
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 0, 60, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             color: rgba(255, 255, 255, 0.7);
             font-weight: 600;
@@ -163,15 +158,13 @@
         }
         
         .filter-btn.active {
-            background: rgba(255, 0, 60, 0.2);
-            border-color: rgba(255, 0, 60, 0.5);
+            background: rgba(138, 16, 219, 0.2);
+            border-color: rgba(138, 16, 219, 0.3);
             color: #fff;
-            box-shadow: 0 0 20px rgba(255, 0, 60, 0.3);
         }
 
         .filter-btn:hover {
-            border-color: rgba(255, 0, 60, 0.4);
-            box-shadow: 0 0 15px rgba(255, 0, 60, 0.2);
+            border-color: rgba(138, 16, 219, 0.2);
         }
         
         .grid {
@@ -183,32 +176,48 @@
             gap: 24px;
         }
         
+        /* ANIMATION FADE IN */
         .card {
             background: rgba(255, 255, 255, 0.03);
             border-radius: 12px;
-            border: 1px solid rgba(255, 0, 60, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             overflow: hidden;
             transition: all 0.3s;
             position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s forwards;
         }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card:nth-child(1) { animation-delay: 0.05s; }
+        .card:nth-child(2) { animation-delay: 0.1s; }
+        .card:nth-child(3) { animation-delay: 0.15s; }
+        .card:nth-child(4) { animation-delay: 0.2s; }
+        .card:nth-child(5) { animation-delay: 0.25s; }
+        .card:nth-child(6) { animation-delay: 0.3s; }
         
         .card:hover {
             transform: translateY(-8px);
-            border-color: rgba(255, 0, 60, 0.5);
-            box-shadow: 0 12px 40px rgba(255, 0, 60, 0.3);
+            border-color: rgba(138, 16, 219, 0.3);
         }
         
         .badge {
             position: absolute;
             top: 12px;
             right: 12px;
-            background: #ff003c;
+            background: #8a10db;
             padding: 6px 16px;
             border-radius: 20px;
             font-weight: 700;
             font-size: 0.9em;
             z-index: 10;
-            box-shadow: 0 4px 15px rgba(255, 0, 60, 0.5);
         }
         
         .platform-badge {
@@ -224,8 +233,8 @@
         }
         
         .platform-badge.pc {
-            background: rgba(255, 0, 60, 0.9);
-            border: 1px solid rgba(255, 0, 60, 1);
+            background: rgba(138, 16, 219, 0.9);
+            border: 1px solid rgba(138, 16, 219, 1);
         }
         
         .platform-badge.ps5 {
@@ -264,19 +273,17 @@
         .store {
             display: inline-block;
             padding: 4px 12px;
-            background: rgba(255, 0, 60, 0.2);
+            background: rgba(138, 16, 219, 0.2);
             border-radius: 12px;
             font-size: 0.8em;
             margin-bottom: 12px;
-            color: #ff003c;
-            font-weight: 600;
         }
         
         .prices {
             display: flex;
             align-items: baseline;
             gap: 12px;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
         
         .old-price {
@@ -288,13 +295,19 @@
         .new-price {
             font-size: 1.8em;
             font-weight: 800;
-            color: #ff003c;
+            color: #8a10db;
+        }
+
+        .price-warning {
+            font-size: 0.75em;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 12px;
         }
         
         .btn {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(135deg, #ff003c, #c0003a);
+            background: linear-gradient(135deg, #8a10db, #4338ca);
             border: none;
             border-radius: 8px;
             color: white;
@@ -307,8 +320,7 @@
         }
 
         .btn:hover {
-            background: linear-gradient(135deg, #ff1a50, #d0004a);
-            box-shadow: 0 6px 20px rgba(255, 0, 60, 0.5);
+            background: linear-gradient(135deg, #9d21f0, #5348e0);
         }
 
         .results-info {
@@ -319,7 +331,7 @@
         }
 
         .results-info strong {
-            color: #ff003c;
+            color: #8a10db;
         }
 
         @media (max-width: 768px) {
@@ -341,7 +353,6 @@
         <p>Mises à jour quotidiennes</p>
     </div>
 
-    <!-- BARRE DE RECHERCHE -->
     <div class="search-bar-container">
         <div class="search-bar">
             <input type="text" id="search-input" placeholder="Rechercher un jeu dans les promos...">
@@ -416,8 +427,8 @@
                 return;
             }
             
-            const html = `<div class="grid">${promos.map(p => `
-                <div class="card" data-platform="${p.platform}" data-title="${p.titre.toLowerCase()}">
+            const html = `<div class="grid">${promos.map((p, index) => `
+                <div class="card" data-platform="${p.platform}" data-title="${p.titre.toLowerCase()}" style="animation-delay: ${(index % 6) * 0.05}s">
                     <div class="platform-badge ${p.platform}">${getPlatformName(p.platform)}</div>
                     <div class="badge">-${p.reduction}%</div>
                     <div class="image" style="background-image: url('${p.image}');"></div>
@@ -428,7 +439,8 @@
                             <span class="old-price">${p.ancien_prix}€</span>
                             <span class="new-price">${p.nouveau_prix}€</span>
                         </div>
-                        <a href="${p.lien}" target="_blank" class="btn">Acheter sur ${p.store}</a>
+                        <div class="price-warning">⚠️ Prix susceptible de varier (±1-2€)</div>
+                        <a href="${p.lien}" target="_blank" rel="noopener noreferrer" class="btn">Voir l'offre sur ${p.store}</a>
                     </div>
                 </div>
             `).join('')}</div>`;
@@ -439,11 +451,25 @@
         function filterBy(platform) {
             currentFilter = platform;
             
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            const searchQuery = document.getElementById('search-input').value.trim().toLowerCase();
-            applyFilters(platform, searchQuery);
+            // Animation de changement
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.animation = 'none';
+            });
+
+            setTimeout(() => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                event.target.classList.add('active');
+                
+                const searchQuery = document.getElementById('search-input').value.trim().toLowerCase();
+                applyFilters(platform, searchQuery);
+
+                // Réanimer les cartes
+                document.querySelectorAll('.card').forEach((card, index) => {
+                    if (card.style.display !== 'none') {
+                        card.style.animation = `fadeInUp 0.5s ${(index % 6) * 0.05}s forwards`;
+                    }
+                });
+            }, 50);
         }
 
         function filterBySearch() {
@@ -451,7 +477,6 @@
             applyFilters(currentFilter, searchQuery);
         }
 
-        // Recherche en temps réel
         document.getElementById('search-input')?.addEventListener('input', () => {
             const searchQuery = document.getElementById('search-input').value.trim().toLowerCase();
             applyFilters(currentFilter, searchQuery);
