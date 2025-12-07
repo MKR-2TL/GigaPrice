@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GigaPrice V0.3 - Comparateur de prix gaming</title>
+    <title>GigaPrice V0.4 - Comparateur de prix gaming</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -20,7 +20,7 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: radial-gradient(circle at 20% 50%, rgba(138, 16, 219, 0.1) 0%, transparent 50%);
+            background: radial-gradient(circle at 20% 50%, rgba(255, 0, 60, 0.15) 0%, transparent 50%);
             z-index: -1;
             pointer-events: none;
         }
@@ -33,7 +33,7 @@
             padding: 20px 40px;
             background: rgba(10, 10, 15, 0.8);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 0, 60, 0.3);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -57,14 +57,16 @@
 
         nav a.active {
             color: #fff;
-            background: rgba(138, 16, 219, 0.2);
+            background: rgba(255, 0, 60, 0.2);
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.3);
         }
 
         nav a:hover {
             color: #fff;
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.2);
         }
 
-        /* BOUTON DISCORD AUTH */
+        /* AUTH */
         .auth-container {
             display: flex;
             align-items: center;
@@ -111,7 +113,7 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            border: 2px solid #8a10db;
+            border: 2px solid #ff003c;
         }
 
         .user-name {
@@ -127,7 +129,7 @@
             margin-top: 10px;
             background: rgba(20, 20, 30, 0.95);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 0, 60, 0.3);
             border-radius: 12px;
             padding: 10px;
             min-width: 200px;
@@ -155,14 +157,14 @@
         }
 
         .user-menu a:hover, .user-menu button:hover {
-            background: rgba(138, 16, 219, 0.2);
+            background: rgba(255, 0, 60, 0.2);
             color: #fff;
         }
 
         .admin-badge {
             display: inline-block;
             padding: 2px 8px;
-            background: linear-gradient(135deg, #8a10db, #4338ca);
+            background: linear-gradient(135deg, #ff003c, #c0003a);
             border-radius: 12px;
             font-size: 0.75em;
             margin-left: 8px;
@@ -172,21 +174,27 @@
         .vip-card {
             position: fixed;
             left: 30px; top: 120px;
-            background: linear-gradient(135deg, rgba(138, 16, 219, 0.2), rgba(67, 56, 202, 0.2));
+            background: linear-gradient(135deg, rgba(255, 0, 60, 0.2), rgba(192, 0, 58, 0.2));
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(138, 16, 219, 0.3);
+            border: 1px solid rgba(255, 0, 60, 0.3);
             border-radius: 16px;
             padding: 24px;
             width: 260px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 32px rgba(255, 0, 60, 0.4);
             z-index: 100;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 8px 32px rgba(255, 0, 60, 0.4); }
+            50% { box-shadow: 0 8px 42px rgba(255, 0, 60, 0.6); }
         }
 
         .vip-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, #8a10db, #4338ca);
+            background: linear-gradient(135deg, #ff003c, #c0003a);
             color: white;
             padding: 6px 16px;
             border-radius: 20px;
@@ -219,13 +227,13 @@
         .vip-price-amount {
             font-size: 2.2em;
             font-weight: 800;
-            color: #8a10db;
+            color: #ff003c;
         }
 
         .vip-btn {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(135deg, #8a10db, #4338ca);
+            background: linear-gradient(135deg, #ff003c, #c0003a);
             border: none;
             border-radius: 8px;
             color: white;
@@ -234,6 +242,12 @@
             text-decoration: none;
             display: block;
             text-align: center;
+            transition: all 0.3s;
+        }
+
+        .vip-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 0, 60, 0.5);
         }
 
         /* HERO */
@@ -247,17 +261,24 @@
             font-weight: 800;
             color: #fff;
             margin-bottom: 12px;
+            text-shadow: 0 0 30px rgba(255, 0, 60, 0.5);
         }
 
         .version-badge {
             display: inline-block;
-            background: rgba(138, 16, 219, 0.3);
+            background: linear-gradient(135deg, rgba(255, 0, 60, 0.3), rgba(192, 0, 58, 0.3));
             padding: 6px 16px;
             border-radius: 20px;
             font-size: 0.9em;
             font-weight: 700;
             margin-bottom: 20px;
-            border: 1px solid rgba(138, 16, 219, 0.5);
+            border: 1px solid rgba(255, 0, 60, 0.5);
+            animation: slideUp 2s ease-in-out infinite;
+        }
+
+        @keyframes slideUp {
+            0%, 100% { transform: translateY(0); box-shadow: 0 0 10px rgba(255, 0, 60, 0.3); }
+            50% { transform: translateY(-5px); box-shadow: 0 5px 20px rgba(255, 0, 60, 0.5); }
         }
 
         .tagline {
@@ -278,8 +299,9 @@
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 0, 60, 0.3);
             overflow: hidden;
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.2);
         }
 
         .search-bar input {
@@ -299,7 +321,7 @@
         .search-bar button {
             padding: 16px 28px;
             border: none;
-            background: linear-gradient(135deg, #8a10db, #4338ca);
+            background: linear-gradient(135deg, #ff003c, #c0003a);
             color: white;
             font-weight: 600;
             cursor: pointer;
@@ -307,7 +329,8 @@
         }
 
         .search-bar button:hover {
-            background: linear-gradient(135deg, #9d21f0, #5348e0);
+            background: linear-gradient(135deg, #ff1a50, #d0004a);
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.5);
         }
 
         /* CARDS */
@@ -325,13 +348,14 @@
             backdrop-filter: blur(20px);
             padding: 32px;
             border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 0, 60, 0.2);
             transition: all 0.3s;
         }
 
         .card:hover {
             transform: translateY(-8px);
-            border-color: rgba(138, 16, 219, 0.3);
+            border-color: rgba(255, 0, 60, 0.5);
+            box-shadow: 0 12px 40px rgba(255, 0, 60, 0.3);
         }
 
         .card h2 {
@@ -351,7 +375,7 @@
             padding: 40px 20px;
             margin-top: 80px;
             background: rgba(10, 10, 15, 0.8);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 0, 60, 0.3);
             color: rgba(255, 255, 255, 0.4);
             font-size: 0.9em;
         }
@@ -375,7 +399,7 @@
         <p>Alertes exclusives et notifications instantanées</p>
         <div class="vip-price">
             <span class="vip-price-amount">4.99</span>
-            <span style="font-size: 1.1em; color: #8a10db; font-weight: 600;">€/mois</span>
+            <span style="font-size: 1.1em; color: #ff003c; font-weight: 600;">€/mois</span>
         </div>
         <a href="https://discord.gg/kSFqRNyn" target="_blank" class="vip-btn">
             En savoir plus
@@ -392,9 +416,7 @@
             <a href="historique.html">Historique Prix</a>
         </div>
 
-        <!-- AUTH CONTAINER -->
         <div class="auth-container">
-            <!-- Bouton de connexion (visible par défaut) -->
             <a href="#" class="discord-login-btn" id="login-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
                     <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
@@ -402,7 +424,6 @@
                 Connexion
             </a>
 
-            <!-- Badge utilisateur (caché par défaut) -->
             <div class="user-badge" id="user-badge">
                 <img src="" alt="Avatar" class="user-avatar" id="user-avatar">
                 <span class="user-name" id="user-name"></span>
@@ -419,7 +440,7 @@
     <!-- HERO -->
     <div class="hero">
         <h1>GigaPrice</h1>
-        <div class="version-badge">V0.3 🚀</div>
+        <div class="version-badge">V0.4</div>
         <p class="tagline">Le comparateur de prix gaming le plus complet</p>
         
         <div class="search">
@@ -459,14 +480,11 @@
     </div>
 
     <footer>
-        © 2025 GigaPrice V0.3 - Tous droits réservés<br>
+        © 2025 GigaPrice V0.4 - Tous droits réservés<br>
         <small>Comparateur indépendant - Prix mis à jour toutes les heures</small>
     </footer>
 
     <script>
-        // ============================================
-        // CONFIGURATION
-        // ============================================
         const DISCORD_CONFIG = {
             clientId: '1446882468077768850',
             redirectUri: window.location.origin + '/',
@@ -475,11 +493,6 @@
             webManagerRole: '1446582422719303728'
         };
 
-        // ============================================
-        // AUTHENTIFICATION DISCORD
-        // ============================================
-        
-        // Vérifier si on revient de Discord
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
 
@@ -489,25 +502,21 @@
             checkExistingAuth();
         }
 
-        // Bouton de connexion
         document.getElementById('login-btn').addEventListener('click', (e) => {
             e.preventDefault();
             loginWithDiscord();
         });
 
-        // Menu utilisateur
         document.getElementById('user-badge').addEventListener('click', () => {
             document.getElementById('user-menu').classList.toggle('show');
         });
 
-        // Fermer le menu si on clique ailleurs
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.user-badge')) {
                 document.getElementById('user-menu').classList.remove('show');
             }
         });
 
-        // Déconnexion
         document.getElementById('logout-btn').addEventListener('click', () => {
             localStorage.removeItem('discord_user');
             window.location.reload();
@@ -540,7 +549,6 @@
             } catch (error) {
                 console.error('Erreur auth:', error);
             } finally {
-                // Nettoyer l'URL
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
         }
@@ -558,26 +566,20 @@
         }
 
         function displayUser(data) {
-            // Masquer le bouton de connexion
             document.getElementById('login-btn').style.display = 'none';
             
-            // Afficher le badge utilisateur
             const userBadge = document.getElementById('user-badge');
             userBadge.classList.add('show');
 
             document.getElementById('user-avatar').src = data.user.avatar;
             document.getElementById('user-name').textContent = data.user.username;
 
-            // Si Web Manager, afficher le badge et le lien admin
             if (data.isWebManager) {
                 document.getElementById('admin-badge').style.display = 'inline-block';
                 document.getElementById('admin-link').style.display = 'block';
             }
         }
 
-        // ============================================
-        // RECHERCHE
-        // ============================================
         document.getElementById('search-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const query = document.getElementById('search-input').value.trim();
