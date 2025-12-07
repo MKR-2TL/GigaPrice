@@ -174,7 +174,7 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: rgba(255, 0, 60, 0.9);
+            background: rgba(255, 0, 60, 0.95);
             color: white;
             padding: 12px 20px;
             border-radius: 8px;
@@ -195,11 +195,11 @@
             display: block;
         }
 
-        /* ✅ VIP CARD POSITION ABSOLUE ET FIXE */
+        /* VIP CARD POSITION FIXE */
         .vip-card {
-            position: absolute;
+            position: fixed;
             left: 30px; 
-            top: 500px; /* Position fixe en dessous du header */
+            top: 500px;
             background: linear-gradient(135deg, rgba(138, 16, 219, 0.2), rgba(67, 56, 202, 0.2));
             backdrop-filter: blur(20px);
             border: 1px solid rgba(138, 16, 219, 0.3);
@@ -209,12 +209,6 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             z-index: 50;
             transition: all 0.3s ease;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
         }
 
         .vip-card:hover {
@@ -234,12 +228,6 @@
             font-weight: 700;
             font-size: 0.9em;
             margin-bottom: 16px;
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0%, 100% { box-shadow: 0 0 10px rgba(138, 16, 219, 0.3); }
-            50% { box-shadow: 0 0 20px rgba(138, 16, 219, 0.6), 0 0 30px rgba(138, 16, 219, 0.4); }
         }
 
         .vip-card h3 {
@@ -267,12 +255,6 @@
             font-size: 2.2em;
             font-weight: 800;
             color: #8a10db;
-            animation: priceGlow 2s infinite;
-        }
-
-        @keyframes priceGlow {
-            0%, 100% { text-shadow: 0 0 10px rgba(138, 16, 219, 0.5); }
-            50% { text-shadow: 0 0 20px rgba(138, 16, 219, 0.8), 0 0 30px rgba(138, 16, 219, 0.6); }
         }
 
         .vip-btn {
@@ -288,25 +270,6 @@
             display: block;
             text-align: center;
             transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .vip-btn::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
-        }
-
-        @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
 
         .vip-btn:hover {
@@ -443,7 +406,7 @@
     </style>
 </head>
 <body>
-    <!-- VIP CARD POSITION ABSOLUE -->
+    <!-- VIP CARD FIXE -->
     <div class="vip-card">
         <div class="vip-badge">
             <span>👑</span>
@@ -515,7 +478,7 @@
     <div class="cards">
         <div class="card">
             <h2>🔥 Promotions</h2>
-            <p>Découvre les meilleures offres du moment, mises à jour quotidiennement. Économise jusqu'à 90%.</p>
+            <p>Découvre les meilleures offres du moment, mises à jour quotidienn ement. Économise jusqu'à 90%.</p>
         </div>
         <div class="card">
             <h2>💰 Comparateur</h2>
@@ -551,7 +514,6 @@
             scope: 'identify guilds.members.read'
         };
 
-        // ✅ DÉCONNEXION AUTO VRAIE
         let logoutTimeout;
         let countdownInterval;
         let remainingSeconds = 300;
@@ -564,28 +526,31 @@
             if (logoutTimeout) clearTimeout(logoutTimeout);
             if (countdownInterval) clearInterval(countdownInterval);
             
-            remainingSeconds = 300;
+            remainingSeconds = 300; // Reset à 5 minutes
 
-            // Timer principal
+            // Timer principal - déconnexion après 5 minutes
             logoutTimeout = setTimeout(() => {
-                console.log('⏰ DÉCONNEXION AUTO');
+                console.log('⏰ DÉCONNEXION AUTO après 5 minutes d\'inactivité');
                 localStorage.removeItem('discord_user');
-                alert('⏰ Déconnexion automatique après 5 minutes');
+                alert('⏰ Déconnexion automatique après 5 minutes d\'inactivité');
                 window.location.reload();
-            }, 300000); // 5 min
+            }, 300000); // 300000ms = 5 minutes
 
-            // Afficher countdown à 60s
+            // Afficher countdown à 60s de la fin
             setTimeout(() => {
-                document.getElementById('logout-timer').classList.add('show');
+                const timerEl = document.getElementById('logout-timer');
+                timerEl.classList.add('show');
                 
                 countdownInterval = setInterval(() => {
                     remainingSeconds--;
                     document.getElementById('timer-seconds').textContent = remainingSeconds;
+                    
                     if (remainingSeconds <= 0) {
                         clearInterval(countdownInterval);
+                        timerEl.classList.remove('show');
                     }
                 }, 1000);
-            }, 240000); // après 4 min
+            }, 240000); // Afficher à 4 minutes (60s avant la fin)
         }
 
         function resetLogoutTimer() {
@@ -593,7 +558,7 @@
             startLogoutTimer();
         }
 
-        // Reset sur activité
+        // Reset timer sur TOUTE activité
         ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart', 'click'].forEach(event => {
             document.addEventListener(event, resetLogoutTimer, { passive: true });
         });
@@ -656,10 +621,13 @@
             if (userData) {
                 try {
                     const user = JSON.parse(userData);
+                    
+                    // Vérifier si la session est expirée (plus de 24h)
                     if (user.timestamp && (Date.now() - user.timestamp) > 86400000) {
                         localStorage.removeItem('discord_user');
                         return;
                     }
+                    
                     displayUser(user);
                     startLogoutTimer();
                 } catch (e) {
