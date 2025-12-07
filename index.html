@@ -195,11 +195,11 @@
             display: block;
         }
 
-        /* VIP CARD ANIMÉE ET STICKY */
+        /* ✅ VIP CARD POSITION ABSOLUE ET FIXE */
         .vip-card {
-            position: fixed;
+            position: absolute;
             left: 30px; 
-            top: 120px;
+            top: 500px; /* Position fixe en dessous du header */
             background: linear-gradient(135deg, rgba(138, 16, 219, 0.2), rgba(67, 56, 202, 0.2));
             backdrop-filter: blur(20px);
             border: 1px solid rgba(138, 16, 219, 0.3);
@@ -207,7 +207,7 @@
             padding: 24px;
             width: 260px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            z-index: 100;
+            z-index: 50;
             transition: all 0.3s ease;
             animation: float 3s ease-in-out infinite;
         }
@@ -317,6 +317,7 @@
         .hero {
             text-align: center;
             padding: 80px 20px 60px;
+            position: relative;
         }
 
         h1 {
@@ -393,6 +394,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 24px;
+            position: relative;
         }
 
         .card {
@@ -441,7 +443,7 @@
     </style>
 </head>
 <body>
-    <!-- VIP CARD ANIMÉE ET STICKY -->
+    <!-- VIP CARD POSITION ABSOLUE -->
     <div class="vip-card">
         <div class="vip-badge">
             <span>👑</span>
@@ -549,41 +551,51 @@
             scope: 'identify guilds.members.read'
         };
 
-        let logoutTimer, countdownTimer;
-        let secondsRemaining = 300;
+        // ✅ DÉCONNEXION AUTO VRAIE
+        let logoutTimeout;
+        let countdownInterval;
+        let remainingSeconds = 300;
         
-        function startAutoLogoutTimer() {
+        function startLogoutTimer() {
             const userData = localStorage.getItem('discord_user');
             if (!userData) return;
 
-            secondsRemaining = 300;
-            clearTimeout(logoutTimer);
-            clearInterval(countdownTimer);
+            // Clear anciens timers
+            if (logoutTimeout) clearTimeout(logoutTimeout);
+            if (countdownInterval) clearInterval(countdownInterval);
+            
+            remainingSeconds = 300;
 
-            logoutTimer = setTimeout(() => {
+            // Timer principal
+            logoutTimeout = setTimeout(() => {
+                console.log('⏰ DÉCONNEXION AUTO');
                 localStorage.removeItem('discord_user');
                 alert('⏰ Déconnexion automatique après 5 minutes');
                 window.location.reload();
-            }, 300000);
+            }, 300000); // 5 min
 
+            // Afficher countdown à 60s
             setTimeout(() => {
                 document.getElementById('logout-timer').classList.add('show');
-            }, 240000);
-
-            countdownTimer = setInterval(() => {
-                secondsRemaining--;
-                document.getElementById('timer-seconds').textContent = secondsRemaining;
-                if (secondsRemaining <= 0) clearInterval(countdownTimer);
-            }, 1000);
+                
+                countdownInterval = setInterval(() => {
+                    remainingSeconds--;
+                    document.getElementById('timer-seconds').textContent = remainingSeconds;
+                    if (remainingSeconds <= 0) {
+                        clearInterval(countdownInterval);
+                    }
+                }, 1000);
+            }, 240000); // après 4 min
         }
 
-        function resetAutoLogoutTimer() {
+        function resetLogoutTimer() {
             document.getElementById('logout-timer').classList.remove('show');
-            startAutoLogoutTimer();
+            startLogoutTimer();
         }
 
-        ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'].forEach(e => {
-            document.addEventListener(e, resetAutoLogoutTimer, true);
+        // Reset sur activité
+        ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart', 'click'].forEach(event => {
+            document.addEventListener(event, resetLogoutTimer, { passive: true });
         });
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -611,8 +623,8 @@
         });
 
         document.getElementById('logout-btn').addEventListener('click', () => {
-            clearTimeout(logoutTimer);
-            clearInterval(countdownTimer);
+            if (logoutTimeout) clearTimeout(logoutTimeout);
+            if (countdownInterval) clearInterval(countdownInterval);
             localStorage.removeItem('discord_user');
             window.location.reload();
         });
@@ -630,12 +642,10 @@
                 if (response.ok && !data.error) {
                     localStorage.setItem('discord_user', JSON.stringify(data));
                     displayUser(data);
-                    startAutoLogoutTimer();
-                } else {
-                    console.error('Auth error:', data);
+                    startLogoutTimer();
                 }
             } catch (error) {
-                console.error('Network error:', error);
+                console.error('Auth error:', error);
             } finally {
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
@@ -651,7 +661,7 @@
                         return;
                     }
                     displayUser(user);
-                    startAutoLogoutTimer();
+                    startLogoutTimer();
                 } catch (e) {
                     localStorage.removeItem('discord_user');
                 }
@@ -677,4 +687,4 @@
         });
     </script>
 </body>
-</html>S
+</html>
