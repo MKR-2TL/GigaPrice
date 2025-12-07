@@ -1,4 +1,4 @@
-<! DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -101,7 +101,7 @@
         }
 
         .stat-value {
-            font-size: 2. 5em;
+            font-size: 2.5em;
             font-weight: 800;
             color: #ff003c;
         }
@@ -349,11 +349,11 @@
             color: #8a10db;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0. 3s;
+            transition: all 0.3s;
             margin-top: 20px;
         }
 
-        refresh-btn:hover {
+        .refresh-btn:hover {
             background: rgba(138, 16, 219, 0.3);
         }
     </style>
@@ -407,7 +407,7 @@
                     <div style="display:flex;align-items:center;gap:12px">
                         <div style="text-align:right">
                             <div style="font-weight:700">${user.user. username}</div>
-                            <div style="font-size:0.85em;color:rgba(255,255,255,0.6)">Web Manager</div>
+                            <div style="font-size:0. 85em;color:rgba(255,255,255,0.6)">Web Manager</div>
                         </div>
                         <img src="${user.user.avatar}" class="user-avatar">
                         <button class="logout-btn" onclick="logout()">Déconnexion</button>
@@ -463,11 +463,12 @@
 
         async function loadPromos() {
             try {
-                console.log('📥 Chargement des promos.. .');
+                console.log('📥 Chargement des promos...');
                 
+                // MODIFICATION ICI - Ligne 380
                 const response = await fetch('https://giga-pricexyz.vercel.app/api/get-pending-promos');
                 
-                if (!response.ok) {
+                if (!response. ok) {
                     throw new Error(`API error: ${response.status}`);
                 }
                 
@@ -504,7 +505,7 @@
             });
 
             const cards = document.querySelectorAll('. promo-card');
-            cards. forEach(card => {
+            cards.forEach(card => {
                 const cardPlatform = card.dataset.platform;
                 
                 if (platform === 'all' || cardPlatform === platform) {
@@ -516,10 +517,10 @@
         }
 
         function displayPromos(promos) {
-            const container = document. getElementById('promos-container');
+            const container = document.getElementById('promos-container');
 
             if (promos.length === 0) {
-                container.innerHTML = `
+                container. innerHTML = `
                     <div class="loading">
                         <h2>📭 Aucune promo en attente</h2>
                         <p>Tape <code>!update</code> sur Discord</p>
@@ -573,8 +574,8 @@
                 card.querySelector('.btn-approve').disabled = false;
             } else {
                 approvedPromos.push(promoData);
-                card.classList. add('approved');
-                card. querySelector('.btn-approve').textContent = '✅ Validé';
+                card. classList.add('approved');
+                card.querySelector('.btn-approve'). textContent = '✅ Validé';
                 card.querySelector('. btn-approve').disabled = true;
             }
             
@@ -595,7 +596,7 @@
             
             count.textContent = approvedPromos.length;
             
-            if (approvedPromos. length > 0) {
+            if (approvedPromos.length > 0) {
                 btn. disabled = false;
                 btn. style.opacity = '1';
             } else {
@@ -615,9 +616,10 @@
             }
 
             try {
-                console.log('📤 Publication...');
+                console.log('📤 Publication.. .');
                 
-                const response = await fetch('/api/publish-promos', {
+                // MODIFICATION ICI - Ligne 450
+                const response = await fetch('https://giga-pricexyz.vercel.app/api/publish-promos', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ promos: approvedPromos })
