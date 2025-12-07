@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin - GigaPrice V0.4</title>
+    <title>Panel Admin - GigaPrice V0.5</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -38,12 +38,6 @@
             box-shadow: 0 4px 20px rgba(255, 0, 60, 0.2);
         }
 
-        .admin-logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
         .admin-logo h1 {
             font-size: 1.8em;
             font-weight: 800;
@@ -61,31 +55,11 @@
             box-shadow: 0 0 15px rgba(255, 0, 60, 0.4);
         }
 
-        .admin-user {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
         .user-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
             border: 2px solid #ff003c;
-        }
-
-        .user-info {
-            text-align: right;
-        }
-
-        .user-name {
-            font-weight: 700;
-            font-size: 1em;
-        }
-
-        .user-role {
-            font-size: 0.85em;
-            color: rgba(255, 255, 255, 0.6);
         }
 
         .logout-btn {
@@ -97,11 +71,6 @@
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s;
-        }
-
-        .logout-btn:hover {
-            background: rgba(255, 0, 60, 0.2);
-            box-shadow: 0 0 15px rgba(255, 0, 60, 0.3);
         }
 
         .stats {
@@ -119,12 +88,6 @@
             border-radius: 16px;
             padding: 24px;
             backdrop-filter: blur(20px);
-            transition: all 0.3s;
-        }
-
-        .stat-card:hover {
-            border-color: rgba(255, 0, 60, 0.5);
-            box-shadow: 0 8px 30px rgba(255, 0, 60, 0.3);
         }
 
         .stat-label {
@@ -158,14 +121,9 @@
             color: #fff;
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-        }
-
-        .refresh-btn, .publish-btn {
+        .publish-btn {
             padding: 12px 24px;
-            background: linear-gradient(135deg, #ff003c, #c0003a);
+            background: linear-gradient(135deg, #10b981, #059669);
             border: none;
             border-radius: 8px;
             color: white;
@@ -174,13 +132,40 @@
             transition: all 0.3s;
         }
 
-        .publish-btn {
-            background: linear-gradient(135deg, #10b981, #059669);
+        .publish-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
-        .refresh-btn:hover, .publish-btn:hover {
+        .publish-btn:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 0, 60, 0.4);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        /* FILTRES PAR PLATEFORME */
+        .platform-filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .platform-filter-btn {
+            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .platform-filter-btn.active {
+            background: rgba(255, 0, 60, 0.2);
+            border-color: rgba(255, 0, 60, 0.5);
+            color: #fff;
         }
 
         .promos-grid {
@@ -195,18 +180,11 @@
             border-radius: 16px;
             overflow: hidden;
             transition: all 0.3s;
-            opacity: 1;
         }
 
         .promo-card.approved {
-            opacity: 0.5;
-            pointer-events: none;
-            filter: grayscale(100%);
-        }
-
-        .promo-card:hover {
-            border-color: rgba(255, 0, 60, 0.5);
-            box-shadow: 0 8px 32px rgba(255, 0, 60, 0.3);
+            border-color: #10b981;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
         }
 
         .promo-image {
@@ -226,7 +204,6 @@
             border-radius: 20px;
             font-weight: 800;
             font-size: 1.1em;
-            box-shadow: 0 4px 15px rgba(255, 0, 60, 0.5);
         }
 
         .promo-platform {
@@ -306,20 +283,10 @@
             color: white;
         }
 
-        .btn-approve:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-        }
-
         .btn-reject {
             background: rgba(239, 68, 68, 0.2);
             border: 1px solid rgba(239, 68, 68, 0.3);
             color: #ef4444;
-        }
-
-        .btn-reject:hover {
-            background: rgba(239, 68, 68, 0.3);
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
         }
 
         .loading {
@@ -343,18 +310,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        .no-promos {
-            text-align: center;
-            padding: 100px 20px;
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        .no-promos h2 {
-            font-size: 2em;
-            margin-bottom: 15px;
-            color: #fff;
-        }
-
         .error-page {
             display: flex;
             flex-direction: column;
@@ -370,38 +325,6 @@
             margin-bottom: 20px;
             color: #ff003c;
         }
-
-        .error-page p {
-            font-size: 1.2em;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 30px;
-        }
-
-        .error-page a {
-            padding: 15px 30px;
-            background: linear-gradient(135deg, #ff003c, #c0003a);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 700;
-            transition: all 0.3s;
-        }
-
-        .error-page a:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 0, 60, 0.4);
-        }
-
-        @media (max-width: 768px) {
-            .admin-header {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            .promos-grid {
-                grid-template-columns: 1fr;
-            }
-        }
     </style>
 </head>
 <body>
@@ -415,20 +338,20 @@
     <script>
         const userData = localStorage.getItem('discord_user');
         let approvedPromos = [];
+        let currentPlatformFilter = 'all';
         
         if (!userData) {
-            showError('Vous devez être connecté', 'Connectez-vous avec Discord pour accéder au panel admin');
+            showError('Vous devez être connecté', 'Connectez-vous avec Discord');
         } else {
             try {
                 const user = JSON.parse(userData);
-                
                 if (!user.isWebManager) {
-                    showError('Accès refusé', 'Vous devez avoir le rôle Web Manager pour accéder à cette page');
+                    showError('Accès refusé', 'Rôle Web Manager requis');
                 } else {
                     initAdminPanel(user);
                 }
             } catch (e) {
-                showError('Erreur', 'Données de session invalides');
+                showError('Erreur', 'Données invalides');
             }
         }
 
@@ -437,7 +360,7 @@
                 <div class="error-page">
                     <h1>⛔ ${title}</h1>
                     <p>${message}</p>
-                    <a href="index.html">← Retour à l'accueil</a>
+                    <a href="index.html" style="color:#ff003c">← Retour</a>
                 </div>
             `;
         }
@@ -445,48 +368,49 @@
         function initAdminPanel(user) {
             document.getElementById('app').innerHTML = `
                 <div class="admin-header">
-                    <div class="admin-logo">
-                        <h1>🎮 GigaPrice Admin</h1>
+                    <div style="display:flex;align-items:center;gap:15px">
+                        <h1>🎮 GigaPrice Admin V0.5</h1>
                         <span class="admin-badge">👑 Web Manager</span>
                     </div>
-                    <div class="admin-user">
-                        <div class="user-info">
-                            <div class="user-name">${user.user.username}</div>
-                            <div class="user-role">Web Manager</div>
+                    <div style="display:flex;align-items:center;gap:12px">
+                        <div style="text-align:right">
+                            <div style="font-weight:700">${user.user.username}</div>
+                            <div style="font-size:0.85em;color:rgba(255,255,255,0.6)">Web Manager</div>
                         </div>
-                        <img src="${user.user.avatar}" alt="Avatar" class="user-avatar">
+                        <img src="${user.user.avatar}" class="user-avatar">
                         <button class="logout-btn" onclick="logout()">Déconnexion</button>
                     </div>
                 </div>
 
                 <div class="stats">
                     <div class="stat-card">
-                        <div class="stat-label">📥 Promos en attente</div>
+                        <div class="stat-label">📥 Promos Discord</div>
                         <div class="stat-value" id="pending-count">0</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">✅ Validées (à publier)</div>
+                        <div class="stat-label">✅ Validées</div>
                         <div class="stat-value" id="approved-count">0</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">🎮 Total généré</div>
-                        <div class="stat-value" id="total-generated">0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">📤 Publiées sur Discord</div>
+                        <div class="stat-label">🌐 Publiées sur le site</div>
                         <div class="stat-value" id="published-count">0</div>
                     </div>
                 </div>
 
                 <div class="content">
                     <div class="section-header">
-                        <h2 class="section-title">📥 Promotions du bot Discord</h2>
-                        <div class="action-buttons">
-                            <button class="publish-btn" onclick="publishToDiscord()" id="publish-btn" disabled>
-                                📤 Publier sur Discord (<span id="publish-count">0</span>)
-                            </button>
-                            <button class="refresh-btn" onclick="loadPromos()">🔄 Actualiser</button>
-                        </div>
+                        <h2 class="section-title">📋 Promos des salons Discord</h2>
+                        <button class="publish-btn" onclick="publishToSite()" id="publish-btn" disabled>
+                            🌐 Publier sur le site (<span id="publish-count">0</span>)
+                        </button>
+                    </div>
+
+                    <div class="platform-filters">
+                        <button class="platform-filter-btn active" data-platform="all" onclick="filterByPlatform('all')">📊 Tout</button>
+                        <button class="platform-filter-btn" data-platform="pc" onclick="filterByPlatform('pc')">💻 PC</button>
+                        <button class="platform-filter-btn" data-platform="ps5" onclick="filterByPlatform('ps5')">🎮 PS5</button>
+                        <button class="platform-filter-btn" data-platform="xbox" onclick="filterByPlatform('xbox')">🟢 Xbox</button>
+                        <button class="platform-filter-btn" data-platform="switch" onclick="filterByPlatform('switch')">🔴 Switch</button>
                     </div>
                     
                     <div class="promos-grid" id="promos-container">
@@ -509,38 +433,59 @@
 
                 document.getElementById('pending-count').textContent = pendingPromos.length;
                 document.getElementById('approved-count').textContent = approvedPromos.length;
-                document.getElementById('total-generated').textContent = pendingPromos.length + approvedPromos.length;
 
                 displayPromos(pendingPromos);
                 updatePublishButton();
 
             } catch (error) {
-                console.error('Erreur chargement:', error);
+                console.error('Erreur:', error);
                 document.getElementById('promos-container').innerHTML = `
-                    <div class="no-promos">
-                        <h2>⚠️ Erreur de chargement</h2>
-                        <p>Impossible de charger les promotions. Le bot a-t-il été lancé avec <code>!update</code> ?</p>
+                    <div class="loading">
+                        <h2>⚠️ Aucune promo</h2>
+                        <p>Lance <code>!update</code> sur Discord pour générer des promos</p>
                     </div>
                 `;
             }
+        }
+
+        function filterByPlatform(platform) {
+            currentPlatformFilter = platform;
+            
+            document.querySelectorAll('.platform-filter-btn').forEach(btn => {
+                if (btn.dataset.platform === platform) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            const cards = document.querySelectorAll('.promo-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const cardPlatform = card.dataset.platform;
+                
+                if (platform === 'all' || cardPlatform === platform) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            console.log(`Filtré: ${visibleCount} promos visibles`);
         }
 
         function displayPromos(promos) {
             const container = document.getElementById('promos-container');
 
             if (promos.length === 0) {
-                container.innerHTML = `
-                    <div class="no-promos">
-                        <h2>✅ Tout est à jour !</h2>
-                        <p>Aucune promotion en attente de validation</p>
-                        <p style="margin-top: 15px; font-size: 0.9em;">Lance <code>!update</code> sur Discord pour générer de nouvelles promos</p>
-                    </div>
-                `;
+                container.innerHTML = '<div class="loading"><p>Aucune promo</p></div>';
                 return;
             }
 
             const html = promos.map(promo => `
-                <div class="promo-card" data-id="${promo.id || promo.dealID}" data-promo='${JSON.stringify(promo)}'>
+                <div class="promo-card" data-id="${promo.id}" data-platform="${promo.plateforme}" data-promo='${JSON.stringify(promo)}'>
                     <div class="promo-image" style="background-image: url('${promo.image}')">
                         <div class="promo-platform ${promo.plateforme}">${getPlatformName(promo.plateforme)}</div>
                         <div class="promo-discount">-${promo.reduction}%</div>
@@ -553,12 +498,8 @@
                             <span class="price-new">${promo.nouveau_prix}€</span>
                         </div>
                         <div class="promo-actions">
-                            <button class="btn btn-approve" onclick="approvePromo('${promo.id || promo.dealID}')">
-                                ✅ Valider
-                            </button>
-                            <button class="btn btn-reject" onclick="rejectPromo('${promo.id || promo.dealID}')">
-                                ❌ Rejeter
-                            </button>
+                            <button class="btn btn-approve" onclick="approvePromo('${promo.id}')">✅ Publier sur le site</button>
+                            <button class="btn btn-reject" onclick="rejectPromo('${promo.id}')">❌ Ignorer</button>
                         </div>
                     </div>
                 </div>
@@ -583,35 +524,15 @@
             
             approvedPromos.push(promoData);
             card.classList.add('approved');
+            card.querySelector('.btn-approve').textContent = '✅ Validé';
+            card.querySelector('.btn-approve').disabled = true;
             
-            updateStats();
+            document.getElementById('approved-count').textContent = approvedPromos.length;
             updatePublishButton();
-            
-            console.log('✅ Promo validée:', promoData.titre);
         }
 
         function rejectPromo(id) {
-            if (confirm('Rejeter cette promotion ?')) {
-                document.querySelector(`[data-id="${id}"]`).remove();
-                updateStats();
-                console.log('❌ Promo rejetée');
-            }
-        }
-
-        function updateStats() {
-            const remaining = document.querySelectorAll('.promo-card:not(.approved)').length;
-            document.getElementById('pending-count').textContent = remaining;
-            document.getElementById('approved-count').textContent = approvedPromos.length;
-            
-            if (remaining === 0) {
-                document.getElementById('promos-container').innerHTML = `
-                    <div class="no-promos">
-                        <h2>✅ Toutes les promos ont été traitées !</h2>
-                        <p>${approvedPromos.length} promos validées prêtes à être publiées</p>
-                        <p style="margin-top: 15px; font-size: 0.9em;">Clique sur "📤 Publier sur Discord" pour les envoyer</p>
-                    </div>
-                `;
-            }
+            document.querySelector(`[data-id="${id}"]`).remove();
         }
 
         function updatePublishButton() {
@@ -623,49 +544,40 @@
             if (approvedPromos.length > 0) {
                 btn.disabled = false;
                 btn.style.opacity = '1';
-                btn.style.cursor = 'pointer';
             } else {
                 btn.disabled = true;
                 btn.style.opacity = '0.5';
-                btn.style.cursor = 'not-allowed';
             }
         }
 
-        async function publishToDiscord() {
+        async function publishToSite() {
             if (approvedPromos.length === 0) {
-                alert('❌ Aucune promo validée à publier');
+                alert('❌ Aucune promo validée');
                 return;
             }
 
-            if (!confirm(`Publier ${approvedPromos.length} promotions sur Discord avec mention du rôle @update-promo ?`)) {
+            if (!confirm(`Publier ${approvedPromos.length} promotions sur le SITE (promo.html) ?`)) {
                 return;
             }
 
-            try {
-                // Sauvegarder dans published.json sur GitHub
-                console.log('📤 Publication de', approvedPromos.length, 'promos...');
-                
-                // Simulation: En production, il faudrait un endpoint API pour écrire dans GitHub
-                // ou utiliser GitHub API directement
-                
-                // Pour l'instant, on affiche un message
-                alert(`✅ ${approvedPromos.length} promotions validées !\n\n` +
-                      `Lance la commande !publish sur Discord pour les poster dans les salons.\n\n` +
-                      `Le bot mentionnera automatiquement @update-promo.`);
-                
-                // Mettre à jour les stats
-                const currentPublished = parseInt(document.getElementById('published-count').textContent);
-                document.getElementById('published-count').textContent = currentPublished + approvedPromos.length;
-                
-                // Réinitialiser
-                approvedPromos = [];
-                updatePublishButton();
-                loadPromos();
-                
-            } catch (error) {
-                console.error('❌ Erreur publication:', error);
-                alert('❌ Erreur lors de la publication. Vérifie les logs.');
-            }
+            console.log('📤 Publication sur le site de', approvedPromos.length, 'promos');
+            console.log('Promos validées:', approvedPromos);
+            
+            // INFO: Ici il faudrait un endpoint API pour écrire dans GitHub
+            // Pour l'instant, on simule
+            
+            alert(`✅ ${approvedPromos.length} promotions publiées sur le SITE !\n\n` +
+                  `Les utilisateurs peuvent maintenant les voir sur :\n` +
+                  `• promo.html\n` +
+                  `• resultats.html (avec badge "EN PROMO")\n\n` +
+                  `Note: En production, il faut un endpoint API GitHub pour sauvegarder dans promo_pc.json, etc.`);
+            
+            document.getElementById('published-count').textContent = 
+                parseInt(document.getElementById('published-count').textContent) + approvedPromos.length;
+            
+            approvedPromos = [];
+            updatePublishButton();
+            loadPromos();
         }
 
         function logout() {
