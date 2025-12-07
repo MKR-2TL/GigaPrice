@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultats - GigaPrice</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #e0e0e0;
+            background: #0a0a0f;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 20%, rgba(138, 16, 219, 0.1) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            padding: 20px;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95em;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        nav a.active {
+            color: #fff;
+            background: rgba(138, 16, 219, 0.2);
+        }
+
+        .header {
+            padding: 40px 20px 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            color: #fff;
+        }
+
+        .search-info {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .search-meta {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95em;
+        }
+
+        .filters {
+            display: flex;
+            gap: 12px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .filter-btn.active {
+            background: rgba(138, 16, 219, 0.2);
+            border-color: rgba(138, 16, 219, 0.3);
+            color: #fff;
+        }
+
+        .results-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .result-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .result-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(138, 16, 219, 0.3);
+            box-shadow: 0 12px 40px rgba(138, 16, 219, 0.2);
+        }
+
+        .result-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .result-platforms {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .platform-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8em;
+            backdrop-filter: blur(10px);
+        }
+
+        .platform-badge.pc {
+            background: rgba(138, 16, 219, 0.9);
+        }
+
+        .platform-badge.ps5 {
+            background: rgba(0, 112, 204, 0.9);
+        }
+
+        .platform-badge.xbox {
+            background: rgba(16, 124, 16, 0.9);
+        }
+
+        .platform-badge.switch {
+            background: rgba(230, 0, 18, 0.9);
+        }
+
+        .result-rating {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 6px 12px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85em;
+        }
+
+        .result-content {
+            padding: 20px;
+        }
+
+        .result-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .result-meta {
+            display: flex;
+            gap: 15px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .result-stores {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .store-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .store-item:hover {
+            background: rgba(138, 16, 219, 0.15);
+        }
+
+        .store-name {
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .store-price {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price-old {
+            color: rgba(255, 255, 255, 0.4);
+            text-decoration: line-through;
+            font-size: 0.9em;
+        }
+
+        .price-current {
+            font-size: 1.3em;
+            font-weight: 800;
+            color: #8a10db;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 100px 20px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #8a10db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 30px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 100px 20px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .no-results h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">Accueil</a>
+        <a href="promo.html">Promotions</a>
+        <a href="comparateur.html">Comparateur</a>
+        <a href="alertes.html">Alertes</a>
+        <a href="historique.html">Historique Prix</a>
+    </nav>
+
+    <div class="header">
+        <a href="index.html" class="back-btn">← Retour</a>
+        <div class="search-info" id="search-info">Résultats pour "<span id="query"></span>"</div>
+        <div class="search-meta" id="search-meta">Chargement...</div>
+    </div>
+
+    <div class="filters">
+        <button class="filter-btn active" onclick="filterPlatform('all')">Toutes les plateformes</button>
+        <button class="filter-btn" onclick="filterPlatform('pc')">💻 PC</button>
+        <button class="filter-btn" onclick="filterPlatform('ps5')">🎮 PlayStation 5</button>
+        <button class="filter-btn" onclick="filterPlatform('xbox')">🟢 Xbox Series X|S</button>
+        <button class="filter-btn" onclick="filterPlatform('switch')">🔴 Nintendo Switch</button>
+    </div>
+
+    <div class="results-container" id="results-container">
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Recherche en cours...</p>
+        </div>
+    </div>
+
+    <script>
+        const RAWG_API_KEY = 'ed6c45e2264a4c6aac17c4f3525362d9';
+        let allResults = [];
+        let currentFilter = 'all';
+
+        // ============================================
+        // RÉCUPÉRER LE TERME DE RECHERCHE
+        // ============================================
+        const urlParams = new URLSearchParams(window.location.search);
+        const query = urlParams.get('q');
+
+        if (!query) {
+            window.location.href = 'index.html';
+        } else {
+            document.getElementById('query').textContent = query;
+            searchGames(query);
+        }
+
+        // ============================================
+        // RECHERCHE MULTI-SOURCES
+        // ============================================
+        async function searchGames(query) {
+            try {
+                // Rechercher sur RAWG
+                const rawgResponse = await fetch(
+                    `https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(query)}&page_size=20&ordering=-rating,-added`
+                );
+                const rawgData = await rawgResponse.json();
+
+                if (!rawgData.results || rawgData.results.length === 0) {
+                    showNoResults();
+                    return;
+                }
+
+                // Pour chaque jeu, récupérer les stores et prix
+                allResults = await Promise.all(
+                    rawgData.results.map(async (game) => {
+                        const detailsResponse = await fetch(`https://api.rawg.io/api/games/${game.id}?key=${RAWG_API_KEY}`);
+                        const details = await detailsResponse.json();
+
+                        // Déterminer les plateformes
+                        const platforms = [];
+                        if (game.platforms) {
+                            game.platforms.forEach(p => {
+                                const name = p.platform.name.toLowerCase();
+                                if (name.includes('pc')) platforms.push('pc');
+                                if (name.includes('playstation')) platforms.push('ps5');
+                                if (name.includes('xbox')) platforms.push('xbox');
+                                if (name.includes('switch')) platforms.push('switch');
+                            });
+                        }
+
+                        // Stores disponibles
+                        const stores = details.stores || [];
+                        const storeLinks = stores.map(s => ({
+                            name: s.store.name,
+                            url: s.url,
+                            platform: getPlatformFromStore(s.store.name)
+                        }));
+
+                        return {
+                            id: game.id,
+                            name: game.name,
+                            image: game.background_image || 'https://via.placeholder.com/400x200',
+                            rating: game.rating || 'N/A',
+                            released: game.released || 'N/A',
+                            platforms: [...new Set(platforms)],
+                            stores: storeLinks
+                        };
+                    })
+                );
+
+                displayResults(allResults);
+
+            } catch (error) {
+                console.error('Erreur recherche:', error);
+                showError();
+            }
+        }
+
+        function getPlatformFromStore(storeName) {
+            const name = storeName.toLowerCase();
+            if (name.includes('playstation')) return 'ps5';
+            if (name.includes('xbox')) return 'xbox';
+            if (name.includes('nintendo')) return 'switch';
+            return 'pc';
+        }
+
+        // ============================================
+        // AFFICHAGE DES RÉSULTATS
+        // ============================================
+        function displayResults(results) {
+            const container = document.getElementById('results-container');
+            
+            if (results.length === 0) {
+                showNoResults();
+                return;
+            }
+
+            document.getElementById('search-meta').textContent = `${results.length} jeux trouvés`;
+
+            const html = `
+                <div class="results-grid">
+                    ${results.map(game => `
+                        <div class="result-card" data-platforms="${game.platforms.join(',')}" onclick="window.location.href='comparateur.html?game=${game.id}'">
+                            <div class="result-image" style="background-image: url('${game.image}')">
+                                <div class="result-platforms">
+                                    ${game.platforms.map(p => `
+                                        <span class="platform-badge ${p}">${getPlatformIcon(p)}</span>
+                                    `).join('')}
+                                </div>
+                                ${game.rating !== 'N/A' ? `<div class="result-rating">⭐ ${game.rating}/5</div>` : ''}
+                            </div>
+                            <div class="result-content">
+                                <div class="result-title">${game.name}</div>
+                                <div class="result-meta">
+                                    <span>📅 ${game.released}</span>
+                                    <span>🎮 ${game.platforms.length} plateforme(s)</span>
+                                </div>
+                                <div class="result-stores">
+                                    ${game.stores.slice(0, 3).map(store => `
+                                        <div class="store-item" onclick="event.stopPropagation(); window.open('${store.url}', '_blank')">
+                                            <span class="store-name">${store.name}</span>
+                                            <div class="store-price">
+                                                <span class="price-current">Voir →</span>
+                                            </div>
+                                        </div>
+                                    `).join('') || '<div class="store-item"><span class="store-name">Recherche des prix en cours...</span></div>'}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function getPlatformIcon(platform) {
+            const icons = {
+                'pc': '💻',
+                'ps5': '🎮',
+                'xbox': '🟢',
+                'switch': '🔴'
+            };
+            return icons[platform] || '🎮';
+        }
+
+        // ============================================
+        // FILTRAGE PAR PLATEFORME
+        // ============================================
+        function filterPlatform(platform) {
+            currentFilter = platform;
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Filter results
+            const cards = document.querySelectorAll('.result-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const platforms = card.dataset.platforms.split(',');
+                
+                if (platform === 'all' || platforms.includes(platform)) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            document.getElementById('search-meta').textContent = `${visibleCount} jeux trouvés`;
+        }
+
+        function showNoResults() {
+            document.getElementById('results-container').innerHTML = `
+                <div class="no-results">
+                    <h2>🔍 Aucun résultat</h2>
+                    <p>Essayez un autre terme de recherche</p>
+                </div>
+            `;
+        }
+
+        function showError() {
+            document.getElementById('results-container').innerHTML = `
+                <div class="no-results">
+                    <h2>⚠️ Erreur de recherche</h2>
+                    <p>Impossible de charger les résultats. Réessayez.</p>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
