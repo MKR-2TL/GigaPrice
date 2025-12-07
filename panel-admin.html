@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - GigaPrice</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #e0e0e0;
+            background: #0d0517; /* Violet très foncé */
+            min-height: 100vh;
+        }
+
+        /* Gradient violet foncé */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 20%, rgba(138, 16, 219, 0.3) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        /* HEADER ADMIN */
+        .admin-header {
+            background: linear-gradient(135deg, rgba(138, 16, 219, 0.3), rgba(67, 56, 202, 0.3));
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid rgba(138, 16, 219, 0.5);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .admin-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .admin-logo h1 {
+            font-size: 1.8em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8a10db, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .admin-badge {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #8a10db, #4338ca);
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85em;
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #8a10db;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 1em;
+        }
+
+        .user-role {
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .logout-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* STATS SECTION */
+        .stats {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: rgba(138, 16, 219, 0.1);
+            border: 1px solid rgba(138, 16, 219, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(20px);
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: #8a10db;
+        }
+
+        /* MAIN CONTENT */
+        .content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 2em;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .refresh-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #8a10db, #4338ca);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(138, 16, 219, 0.4);
+        }
+
+        /* PROMO CARDS */
+        .promos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 24px;
+        }
+
+        .promo-card {
+            background: rgba(138, 16, 219, 0.05);
+            border: 1px solid rgba(138, 16, 219, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .promo-card:hover {
+            border-color: rgba(138, 16, 219, 0.5);
+            box-shadow: 0 8px 32px rgba(138, 16, 219, 0.3);
+        }
+
+        .promo-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .promo-discount {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 8px 16px;
+            background: #8a10db;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 1.1em;
+        }
+
+        .promo-platform {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85em;
+            backdrop-filter: blur(10px);
+        }
+
+        .promo-platform.pc { background: rgba(138, 16, 219, 0.9); }
+        .promo-platform.ps5 { background: rgba(0, 112, 204, 0.9); }
+        .promo-platform.xbox { background: rgba(16, 124, 16, 0.9); }
+        .promo-platform.switch { background: rgba(230, 0, 18, 0.9); }
+
+        .promo-content {
+            padding: 20px;
+        }
+
+        .promo-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+
+        .promo-store {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(138, 16, 219, 0.2);
+            border-radius: 12px;
+            font-size: 0.85em;
+            margin-bottom: 12px;
+            color: #8a10db;
+            font-weight: 600;
+        }
+
+        .promo-prices {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .price-old {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.4);
+            text-decoration: line-through;
+        }
+
+        .price-new {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: #8a10db;
+        }
+
+        .promo-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-approve {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .btn-approve:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-reject {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .btn-reject:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 100px 20px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .spinner {
+            border: 3px solid rgba(138, 16, 219, 0.2);
+            border-top: 3px solid #8a10db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 30px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .no-promos {
+            text-align: center;
+            padding: 100px 20px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .no-promos h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .error-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .error-page h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            color: #8a10db;
+        }
+
+        .error-page p {
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+        }
+
+        .error-page a {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #8a10db, #4338ca);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .promos-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Vérification des permissions...</p>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // VÉRIFICATION DES PERMISSIONS
+        // ============================================
+        const userData = localStorage.getItem('discord_user');
+        
+        if (!userData) {
+            // Pas connecté
+            showError('Vous devez être connecté', 'Connectez-vous avec Discord pour accéder au panel admin');
+        } else {
+            try {
+                const user = JSON.parse(userData);
+                
+                if (!user.isWebManager) {
+                    // Pas Web Manager
+                    showError('Accès refusé', 'Vous devez avoir le rôle Web Manager pour accéder à cette page');
+                } else {
+                    // OK, afficher le panel
+                    initAdminPanel(user);
+                }
+            } catch (e) {
+                showError('Erreur', 'Données de session invalides');
+            }
+        }
+
+        // ============================================
+        // AFFICHAGE ERREUR
+        // ============================================
+        function showError(title, message) {
+            document.getElementById('app').innerHTML = `
+                <div class="error-page">
+                    <h1>⛔ ${title}</h1>
+                    <p>${message}</p>
+                    <a href="index.html">← Retour à l'accueil</a>
+                </div>
+            `;
+        }
+
+        // ============================================
+        // INITIALISATION DU PANEL
+        // ============================================
+        function initAdminPanel(user) {
+            document.getElementById('app').innerHTML = `
+                <!-- HEADER -->
+                <div class="admin-header">
+                    <div class="admin-logo">
+                        <h1>🎮 GigaPrice Admin</h1>
+                        <span class="admin-badge">👑 Web Manager</span>
+                    </div>
+                    <div class="admin-user">
+                        <div class="user-info">
+                            <div class="user-name">${user.user.username}</div>
+                            <div class="user-role">Web Manager</div>
+                        </div>
+                        <img src="${user.user.avatar}" alt="Avatar" class="user-avatar">
+                        <button class="logout-btn" onclick="logout()">Déconnexion</button>
+                    </div>
+                </div>
+
+                <!-- STATS -->
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-label">📥 Promos en attente</div>
+                        <div class="stat-value" id="pending-count">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">✅ Publiées aujourd'hui</div>
+                        <div class="stat-value" id="published-today">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">🎮 Total publié</div>
+                        <div class="stat-value" id="total-published">0</div>
+                    </div>
+                </div>
+
+                <!-- CONTENT -->
+                <div class="content">
+                    <div class="section-header">
+                        <h2 class="section-title">📥 Promotions en attente de validation</h2>
+                        <button class="refresh-btn" onclick="loadPromos()">🔄 Actualiser</button>
+                    </div>
+                    
+                    <div class="promos-grid" id="promos-container">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <p>Chargement des promotions...</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Charger les promos
+            loadPromos();
+        }
+
+        // ============================================
+        // CHARGEMENT DES PROMOS
+        // ============================================
+        async function loadPromos() {
+            try {
+                // Simuler des promos en attente
+                // TODO: Remplacer par un vrai appel API vers ton bot Discord
+                const pendingPromos = [
+                    {
+                        id: 1,
+                        titre: "Cyberpunk 2077",
+                        plateforme: "pc",
+                        ancien_prix: "59.99",
+                        nouveau_prix: "29.99",
+                        reduction: 50,
+                        store: "Steam",
+                        image: "https://media.rawg.io/media/games/26d/26d4437715bee60138dab4a7c8c59c92.jpg",
+                        date: new Date().toISOString()
+                    },
+                    {
+                        id: 2,
+                        titre: "Spider-Man Miles Morales",
+                        plateforme: "ps5",
+                        ancien_prix: "69.99",
+                        nouveau_prix: "39.99",
+                        reduction: 43,
+                        store: "PlayStation Store",
+                        image: "https://media.rawg.io/media/games/9fa/9fa63622543e5d4f6d99aa9d73b043de.jpg",
+                        date: new Date().toISOString()
+                    },
+                    {
+                        id: 3,
+                        titre: "Halo Infinite",
+                        plateforme: "xbox",
+                        ancien_prix: "59.99",
+                        nouveau_prix: "19.99",
+                        reduction: 67,
+                        store: "Xbox Store",
+                        image: "https://media.rawg.io/media/games/e03/e030b588b5c7d98d8a74afa90d1c9a63.jpg",
+                        date: new Date().toISOString()
+                    },
+                    {
+                        id: 4,
+                        titre: "Zelda Breath of the Wild",
+                        plateforme: "switch",
+                        ancien_prix: "59.99",
+                        nouveau_prix: "44.99",
+                        reduction: 25,
+                        store: "Nintendo eShop",
+                        image: "https://media.rawg.io/media/games/cc1/cc196a5ad763b85dda604e36119673e8.jpg",
+                        date: new Date().toISOString()
+                    }
+                ];
+
+                // Update stats
+                document.getElementById('pending-count').textContent = pendingPromos.length;
+                document.getElementById('published-today').textContent = '12';
+                document.getElementById('total-published').textContent = '847';
+
+                displayPromos(pendingPromos);
+
+            } catch (error) {
+                console.error('Erreur chargement:', error);
+                document.getElementById('promos-container').innerHTML = `
+                    <div class="no-promos">
+                        <h2>⚠️ Erreur de chargement</h2>
+                        <p>Impossible de charger les promotions</p>
+                    </div>
+                `;
+            }
+        }
+
+        function displayPromos(promos) {
+            const container = document.getElementById('promos-container');
+
+            if (promos.length === 0) {
+                container.innerHTML = `
+                    <div class="no-promos">
+                        <h2>✅ Tout est à jour !</h2>
+                        <p>Aucune promotion en attente de validation</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const html = promos.map(promo => `
+                <div class="promo-card" data-id="${promo.id}">
+                    <div class="promo-image" style="background-image: url('${promo.image}')">
+                        <div class="promo-platform ${promo.plateforme}">${getPlatformName(promo.plateforme)}</div>
+                        <div class="promo-discount">-${promo.reduction}%</div>
+                    </div>
+                    <div class="promo-content">
+                        <div class="promo-title">${promo.titre}</div>
+                        <div class="promo-store">${promo.store}</div>
+                        <div class="promo-prices">
+                            <span class="price-old">${promo.ancien_prix}€</span>
+                            <span class="price-new">${promo.nouveau_prix}€</span>
+                        </div>
+                        <div class="promo-actions">
+                            <button class="btn btn-approve" onclick="approvePromo(${promo.id})">
+                                ✅ Publier
+                            </button>
+                            <button class="btn btn-reject" onclick="rejectPromo(${promo.id})">
+                                ❌ Rejeter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            container.innerHTML = html;
+        }
+
+        function getPlatformName(platform) {
+            const names = {
+                'pc': '💻 PC',
+                'ps5': '🎮 PS5',
+                'xbox': '🟢 Xbox',
+                'switch': '🔴 Switch'
+            };
+            return names[platform] || platform;
+        }
+
+        // ============================================
+        // ACTIONS
+        // ============================================
+        function approvePromo(id) {
+            if (confirm('Publier cette promotion sur le site ?')) {
+                // TODO: Appel API pour publier
+                console.log('Approving promo:', id);
+                
+                // Retirer de la liste
+                document.querySelector(`[data-id="${id}"]`).style.opacity = '0.5';
+                setTimeout(() => {
+                    document.querySelector(`[data-id="${id}"]`).remove();
+                    updateStats();
+                }, 500);
+
+                alert('✅ Promotion publiée avec succès !');
+            }
+        }
+
+        function rejectPromo(id) {
+            if (confirm('Rejeter cette promotion ?')) {
+                // TODO: Appel API pour rejeter
+                console.log('Rejecting promo:', id);
+                
+                // Retirer de la liste
+                document.querySelector(`[data-id="${id}"]`).remove();
+                updateStats();
+
+                alert('❌ Promotion rejetée');
+            }
+        }
+
+        function updateStats() {
+            const remaining = document.querySelectorAll('.promo-card').length;
+            document.getElementById('pending-count').textContent = remaining;
+            
+            if (remaining === 0) {
+                document.getElementById('promos-container').innerHTML = `
+                    <div class="no-promos">
+                        <h2>✅ Tout est à jour !</h2>
+                        <p>Aucune promotion en attente de validation</p>
+                    </div>
+                `;
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('discord_user');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
