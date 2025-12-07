@@ -12,23 +12,30 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
-      // Lire le fichier pending.json depuis le dossier public/data
-      const filePath = path.join(process. cwd(), 'public', 'data', 'pending. json');
+      // Essayer d'abord le dossier public/data
+      let filePath = path.join(process. cwd(), 'public', 'data', 'pending.json');
       
       try {
         const data = await fs.readFile(filePath, 'utf8');
         const promos = JSON.parse(data);
-        
-        console.log(`✅ API: Chargé ${promos.length} promos pending`);
+        console.log(`✅ API: ${promos.length} promos chargées (public/data)`);
         return res.status(200).json(promos);
-      } catch (readError) {
-        // Si le fichier n'existe pas ou est vide, retourner un tableau vide
-        console.warn('⚠️ API: Fichier pending.json non trouvé ou vide');
-        return res. status(200).json([]);
+      } catch (e) {
+        // Si pas trouvé, essayer la racine
+        filePath = path. join(process.cwd(), 'data', 'pending.json');
+        try {
+          const data = await fs.readFile(filePath, 'utf8');
+          const promos = JSON. parse(data);
+          console. log(`✅ API: ${promos.length} promos chargées (data)`);
+          return res. status(200).json(promos);
+        } catch (e2) {
+          console.warn('⚠️ Fichier pending.json non trouvé');
+          return res.status(200).json([]);
+        }
       }
     } catch (error) {
-      console.error('❌ API get-pending-promos:', error. message);
-      return res.status(200).json([]); // Retourner tableau vide en cas d'erreur
+      console.error('❌ Erreur API:', error. message);
+      return res.status(200).json([]);
     }
   }
   
