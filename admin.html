@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+<! DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Admin - GigaPrice V0.5</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2? family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -73,6 +73,10 @@
             transition: all 0.3s;
         }
 
+        .logout-btn:hover {
+            background: rgba(255, 0, 60, 0.2);
+        }
+
         .stats {
             max-width: 1400px;
             margin: 40px auto;
@@ -97,7 +101,7 @@
         }
 
         .stat-value {
-            font-size: 2.5em;
+            font-size: 2. 5em;
             font-weight: 800;
             color: #ff003c;
         }
@@ -161,7 +165,7 @@
             font-family: 'Inter', sans-serif;
         }
 
-        .platform-filter-btn.active {
+        .platform-filter-btn. active {
             background: rgba(255, 0, 60, 0.2);
             border-color: rgba(255, 0, 60, 0.5);
             color: #fff;
@@ -173,7 +177,7 @@
             gap: 24px;
         }
 
-        .promo-card {
+        . promo-card {
             background: rgba(255, 0, 60, 0.05);
             border: 1px solid rgba(255, 0, 60, 0.2);
             border-radius: 16px;
@@ -181,7 +185,7 @@
             transition: all 0.3s;
         }
 
-        .promo-card.approved {
+        .promo-card. approved {
             border-color: #10b981;
             box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
         }
@@ -202,7 +206,7 @@
             background: #ff003c;
             border-radius: 20px;
             font-weight: 800;
-            font-size: 1.1em;
+            font-size: 1. 1em;
         }
 
         .promo-platform {
@@ -225,7 +229,7 @@
             padding: 20px;
         }
 
-        .promo-title {
+        . promo-title {
             font-size: 1.3em;
             font-weight: 700;
             margin-bottom: 10px;
@@ -262,7 +266,7 @@
             color: #ff003c;
         }
 
-        .promo-actions {
+        . promo-actions {
             display: flex;
             gap: 10px;
         }
@@ -319,7 +323,7 @@
             padding: 40px;
         }
 
-        .error-page h1 {
+        . error-page h1 {
             font-size: 4em;
             margin-bottom: 20px;
             color: #ff003c;
@@ -330,7 +334,7 @@
     <div id="app">
         <div class="loading">
             <div class="spinner"></div>
-            <p>Vérification des permissions...</p>
+            <p>Vérification des permissions... </p>
         </div>
     </div>
 
@@ -339,12 +343,12 @@
         let approvedPromos = [];
         let currentPlatformFilter = 'all';
         
-        if (!userData) {
+        if (! userData) {
             showError('Vous devez être connecté', 'Connectez-vous avec Discord');
         } else {
             try {
                 const user = JSON.parse(userData);
-                if (!user.isWebManager) {
+                if (! user.isWebManager) {
                     showError('Accès refusé', 'Rôle Web Manager requis');
                 } else {
                     initAdminPanel(user);
@@ -373,7 +377,7 @@
                     </div>
                     <div style="display:flex;align-items:center;gap:12px">
                         <div style="text-align:right">
-                            <div style="font-weight:700">${user.user.username}</div>
+                            <div style="font-weight:700">${user.user. username}</div>
                             <div style="font-size:0.85em;color:rgba(255,255,255,0.6)">Web Manager</div>
                         </div>
                         <img src="${user.user.avatar}" class="user-avatar">
@@ -425,11 +429,20 @@
             setInterval(loadPromos, 60000);
         }
 
+        // 🔧 NOUVELLE FONCTION : Charger depuis l'API
         async function loadPromos() {
             try {
-                const response = await fetch('https://raw.githubusercontent.com/MKR-2TL/GigaPrice/main/data/pending.json');
+                console.log('📥 Chargement des promotions depuis API.. .');
+                
+                const response = await fetch('/api/get-pending-promos');
+                
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+                
                 const pendingPromos = await response.json();
 
+                console.log(`✅ ${pendingPromos.length} promos chargées`);
                 document.getElementById('pending-count').textContent = pendingPromos.length;
                 document.getElementById('approved-count').textContent = approvedPromos.length;
 
@@ -437,11 +450,11 @@
                 updatePublishButton();
 
             } catch (error) {
-                console.error('Erreur:', error);
+                console.error('❌ Erreur chargement:', error);
                 document.getElementById('promos-container').innerHTML = `
                     <div class="loading">
-                        <h2>⚠️ Aucune promo</h2>
-                        <p>Lance <code>!update</code> sur Discord pour générer des promos</p>
+                        <h2>⚠️ Impossible de charger les promos</h2>
+                        <p>Lance <code>! update</code> sur Discord pour générer des promos</p>
                     </div>
                 `;
             }
@@ -458,10 +471,10 @@
                 }
             });
 
-            const cards = document.querySelectorAll('.promo-card');
+            const cards = document.querySelectorAll('. promo-card');
             let visibleCount = 0;
 
-            cards.forEach(card => {
+            cards. forEach(card => {
                 const cardPlatform = card.dataset.platform;
                 
                 if (platform === 'all' || cardPlatform === platform) {
@@ -477,7 +490,7 @@
             const container = document.getElementById('promos-container');
 
             if (promos.length === 0) {
-                container.innerHTML = '<div class="loading"><p>Aucune promo en attente</p></div>';
+                container. innerHTML = '<div class="loading"><p>Aucune promo en attente</p></div>';
                 return;
             }
 
@@ -502,7 +515,7 @@
                 </div>
             `).join('');
 
-            container.innerHTML = html;
+            container. innerHTML = html;
         }
 
         function getPlatformName(platform) {
@@ -522,7 +535,7 @@
             approvedPromos.push(promoData);
             card.classList.add('approved');
             card.querySelector('.btn-approve').textContent = '✅ Validé';
-            card.querySelector('.btn-approve').disabled = true;
+            card.querySelector('. btn-approve').disabled = true;
             
             document.getElementById('approved-count').textContent = approvedPromos.length;
             updatePublishButton();
@@ -539,41 +552,57 @@
             count.textContent = approvedPromos.length;
             
             if (approvedPromos.length > 0) {
-                btn.disabled = false;
-                btn.style.opacity = '1';
+                btn. disabled = false;
+                btn. style.opacity = '1';
             } else {
                 btn.disabled = true;
                 btn.style.opacity = '0.5';
             }
         }
 
+        // 🔧 NOUVELLE FONCTION : Publier vers l'API
         async function publishToSite() {
             if (approvedPromos.length === 0) {
                 alert('❌ Aucune promo validée');
                 return;
             }
 
-            if (!confirm(`Publier ${approvedPromos.length} promotions sur le SITE (promo.html) ?`)) {
+            if (! confirm(`Publier ${approvedPromos.length} promotions sur le SITE ?`)) {
                 return;
             }
 
-            console.log('📤 Publication sur le SITE de', approvedPromos.length, 'promos');
-            
-            // SIMULATION : En production, il faut un endpoint API GitHub
-            // Pour l'instant, on affiche juste un message
-            
-            alert(`✅ ${approvedPromos.length} promotions publiées sur le SITE !\n\n` +
-                  `Les utilisateurs peuvent maintenant les voir sur:\n` +
-                  `• promo.html\n` +
-                  `• resultats.html (avec badge "EN PROMO")\n\n` +
-                  `⚠️ Note: En production, un endpoint API GitHub doit sauvegarder dans promo_pc.json, promo_ps5.json, etc.`);
-            
-            document.getElementById('published-count').textContent = 
-                parseInt(document.getElementById('published-count').textContent) + approvedPromos.length;
-            
-            approvedPromos = [];
-            updatePublishButton();
-            loadPromos();
+            try {
+                console.log('📤 Envoi vers API...');
+                
+                const response = await fetch('/api/publish-promos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ promos: approvedPromos })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    alert(`✅ ${approvedPromos.length} promotions publiées !\n\n` +
+                        `💻 PC: ${result.details.pc}\n` +
+                        `🎮 PS5: ${result.details.ps5}\n` +
+                        `🟢 Xbox: ${result.details.xbox}\n` +
+                        `🔴 Switch: ${result.details.switch}\n\n` +
+                        `Les utilisateurs peuvent les voir sur promo.html`);
+                    
+                    document.getElementById('published-count').textContent = 
+                        parseInt(document.getElementById('published-count').textContent) + approvedPromos.length;
+                    
+                    approvedPromos = [];
+                    updatePublishButton();
+                    loadPromos();
+                } else {
+                    alert(`❌ Erreur: ${result.error || 'Erreur inconnue'}`);
+                }
+            } catch (error) {
+                console.error('❌ Erreur publication:', error);
+                alert(`❌ Erreur de connexion: ${error.message}`);
+            }
         }
 
         function logout() {
