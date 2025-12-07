@@ -20,20 +20,20 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: radial-gradient(circle at 20% 50%, rgba(255, 0, 60, 0.15) 0%, transparent 50%);
+            background: radial-gradient(circle at 20% 50%, rgba(138, 16, 219, 0.1) 0%, transparent 50%);
             z-index: -1;
             pointer-events: none;
         }
 
-        /* NAVBAR */
+        /* NAVBAR CENTRÉE */
         nav {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             padding: 20px 40px;
             background: rgba(10, 10, 15, 0.8);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 0, 60, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -57,17 +57,19 @@
 
         nav a.active {
             color: #fff;
-            background: rgba(255, 0, 60, 0.2);
-            box-shadow: 0 0 20px rgba(255, 0, 60, 0.3);
+            background: rgba(138, 16, 219, 0.2);
         }
 
         nav a:hover {
             color: #fff;
-            box-shadow: 0 0 15px rgba(255, 0, 60, 0.2);
         }
 
-        /* AUTH */
+        /* AUTH - Positionné en haut à droite */
         .auth-container {
+            position: fixed;
+            top: 20px;
+            right: 40px;
+            z-index: 1001;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -113,7 +115,7 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            border: 2px solid #ff003c;
+            border: 2px solid #8a10db;
         }
 
         .user-name {
@@ -129,7 +131,7 @@
             margin-top: 10px;
             background: rgba(20, 20, 30, 0.95);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 0, 60, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             padding: 10px;
             min-width: 200px;
@@ -157,44 +159,39 @@
         }
 
         .user-menu a:hover, .user-menu button:hover {
-            background: rgba(255, 0, 60, 0.2);
+            background: rgba(138, 16, 219, 0.2);
             color: #fff;
         }
 
         .admin-badge {
             display: inline-block;
             padding: 2px 8px;
-            background: linear-gradient(135deg, #ff003c, #c0003a);
+            background: linear-gradient(135deg, #8a10db, #4338ca);
             border-radius: 12px;
             font-size: 0.75em;
             margin-left: 8px;
         }
 
-        /* VIP CARD */
+        /* VIP CARD STATIQUE */
         .vip-card {
             position: fixed;
-            left: 30px; top: 120px;
-            background: linear-gradient(135deg, rgba(255, 0, 60, 0.2), rgba(192, 0, 58, 0.2));
+            left: 30px; 
+            top: 120px;
+            background: linear-gradient(135deg, rgba(138, 16, 219, 0.2), rgba(67, 56, 202, 0.2));
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 0, 60, 0.3);
+            border: 1px solid rgba(138, 16, 219, 0.3);
             border-radius: 16px;
             padding: 24px;
             width: 260px;
-            box-shadow: 0 8px 32px rgba(255, 0, 60, 0.4);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             z-index: 100;
-            animation: glow 3s ease-in-out infinite;
-        }
-
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 8px 32px rgba(255, 0, 60, 0.4); }
-            50% { box-shadow: 0 8px 42px rgba(255, 0, 60, 0.6); }
         }
 
         .vip-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, #ff003c, #c0003a);
+            background: linear-gradient(135deg, #8a10db, #4338ca);
             color: white;
             padding: 6px 16px;
             border-radius: 20px;
@@ -227,13 +224,13 @@
         .vip-price-amount {
             font-size: 2.2em;
             font-weight: 800;
-            color: #ff003c;
+            color: #8a10db;
         }
 
         .vip-btn {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(135deg, #ff003c, #c0003a);
+            background: linear-gradient(135deg, #8a10db, #4338ca);
             border: none;
             border-radius: 8px;
             color: white;
@@ -242,12 +239,6 @@
             text-decoration: none;
             display: block;
             text-align: center;
-            transition: all 0.3s;
-        }
-
-        .vip-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 0, 60, 0.5);
         }
 
         /* HERO */
@@ -261,24 +252,17 @@
             font-weight: 800;
             color: #fff;
             margin-bottom: 12px;
-            text-shadow: 0 0 30px rgba(255, 0, 60, 0.5);
         }
 
         .version-badge {
             display: inline-block;
-            background: linear-gradient(135deg, rgba(255, 0, 60, 0.3), rgba(192, 0, 58, 0.3));
+            background: rgba(138, 16, 219, 0.3);
             padding: 6px 16px;
             border-radius: 20px;
             font-size: 0.9em;
             font-weight: 700;
             margin-bottom: 20px;
-            border: 1px solid rgba(255, 0, 60, 0.5);
-            animation: slideUp 2s ease-in-out infinite;
-        }
-
-        @keyframes slideUp {
-            0%, 100% { transform: translateY(0); box-shadow: 0 0 10px rgba(255, 0, 60, 0.3); }
-            50% { transform: translateY(-5px); box-shadow: 0 5px 20px rgba(255, 0, 60, 0.5); }
+            border: 1px solid rgba(138, 16, 219, 0.5);
         }
 
         .tagline {
@@ -299,9 +283,8 @@
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
             border-radius: 12px;
-            border: 1px solid rgba(255, 0, 60, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(255, 0, 60, 0.2);
         }
 
         .search-bar input {
@@ -321,7 +304,7 @@
         .search-bar button {
             padding: 16px 28px;
             border: none;
-            background: linear-gradient(135deg, #ff003c, #c0003a);
+            background: linear-gradient(135deg, #8a10db, #4338ca);
             color: white;
             font-weight: 600;
             cursor: pointer;
@@ -329,8 +312,7 @@
         }
 
         .search-bar button:hover {
-            background: linear-gradient(135deg, #ff1a50, #d0004a);
-            box-shadow: 0 0 20px rgba(255, 0, 60, 0.5);
+            background: linear-gradient(135deg, #9d21f0, #5348e0);
         }
 
         /* CARDS */
@@ -348,14 +330,13 @@
             backdrop-filter: blur(20px);
             padding: 32px;
             border-radius: 16px;
-            border: 1px solid rgba(255, 0, 60, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.3s;
         }
 
         .card:hover {
             transform: translateY(-8px);
-            border-color: rgba(255, 0, 60, 0.5);
-            box-shadow: 0 12px 40px rgba(255, 0, 60, 0.3);
+            border-color: rgba(138, 16, 219, 0.3);
         }
 
         .card h2 {
@@ -375,7 +356,7 @@
             padding: 40px 20px;
             margin-top: 80px;
             background: rgba(10, 10, 15, 0.8);
-            border-top: 1px solid rgba(255, 0, 60, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
             color: rgba(255, 255, 255, 0.4);
             font-size: 0.9em;
         }
@@ -385,11 +366,12 @@
             .cards { grid-template-columns: 1fr; }
             .vip-card { display: none; }
             nav { flex-direction: column; gap: 15px; }
+            .auth-container { position: static; margin-top: 15px; }
         }
     </style>
 </head>
 <body>
-    <!-- VIP CARD -->
+    <!-- VIP CARD STATIQUE -->
     <div class="vip-card">
         <div class="vip-badge">
             <span>👑</span>
@@ -399,14 +381,35 @@
         <p>Alertes exclusives et notifications instantanées</p>
         <div class="vip-price">
             <span class="vip-price-amount">4.99</span>
-            <span style="font-size: 1.1em; color: #ff003c; font-weight: 600;">€/mois</span>
+            <span style="font-size: 1.1em; color: #8a10db; font-weight: 600;">€/mois</span>
         </div>
         <a href="https://discord.gg/kSFqRNyn" target="_blank" class="vip-btn">
             En savoir plus
         </a>
     </div>
 
-    <!-- NAVBAR -->
+    <!-- AUTH EN HAUT À DROITE -->
+    <div class="auth-container">
+        <a href="#" class="discord-login-btn" id="login-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
+            </svg>
+            Connexion
+        </a>
+
+        <div class="user-badge" id="user-badge">
+            <img src="" alt="Avatar" class="user-avatar" id="user-avatar">
+            <span class="user-name" id="user-name"></span>
+            <span class="admin-badge" id="admin-badge" style="display: none;">👑</span>
+            
+            <div class="user-menu" id="user-menu">
+                <a href="admin.html" id="admin-link" style="display: none;">👑 Panel Admin</a>
+                <button id="logout-btn">🚪 Déconnexion</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVBAR CENTRÉE -->
     <nav>
         <div class="nav-links">
             <a href="index.html" class="active">Accueil</a>
@@ -414,26 +417,6 @@
             <a href="comparateur.html">Comparateur</a>
             <a href="alertes.html">Alertes</a>
             <a href="historique.html">Historique Prix</a>
-        </div>
-
-        <div class="auth-container">
-            <a href="#" class="discord-login-btn" id="login-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
-                </svg>
-                Connexion
-            </a>
-
-            <div class="user-badge" id="user-badge">
-                <img src="" alt="Avatar" class="user-avatar" id="user-avatar">
-                <span class="user-name" id="user-name"></span>
-                <span class="admin-badge" id="admin-badge" style="display: none;">👑</span>
-                
-                <div class="user-menu" id="user-menu">
-                    <a href="admin.html" id="admin-link" style="display: none;">👑 Panel Admin</a>
-                    <button id="logout-btn">🚪 Déconnexion</button>
-                </div>
-            </div>
         </div>
     </nav>
 
@@ -493,6 +476,26 @@
             webManagerRole: '1446582422719303728'
         };
 
+        // DÉCONNEXION AUTO APRÈS 5MIN
+        let inactivityTimer;
+        
+        function resetInactivityTimer() {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(() => {
+                const userData = localStorage.getItem('discord_user');
+                if (userData) {
+                    localStorage.removeItem('discord_user');
+                    alert('⏰ Déconnexion automatique après 5 minutes d\'inactivité');
+                    window.location.reload();
+                }
+            }, 5 * 60 * 1000); // 5 minutes
+        }
+
+        // Reset timer sur toute activité
+        ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'].forEach(event => {
+            document.addEventListener(event, resetInactivityTimer, true);
+        });
+
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
 
@@ -545,6 +548,7 @@
                 if (!data.error) {
                     localStorage.setItem('discord_user', JSON.stringify(data));
                     displayUser(data);
+                    resetInactivityTimer(); // Démarre le timer
                 }
             } catch (error) {
                 console.error('Erreur auth:', error);
@@ -559,6 +563,7 @@
                 try {
                     const user = JSON.parse(userData);
                     displayUser(user);
+                    resetInactivityTimer(); // Démarre le timer
                 } catch (e) {
                     localStorage.removeItem('discord_user');
                 }
